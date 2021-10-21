@@ -3,6 +3,47 @@ import cfg
 import sys
 
 
+class TancikClass(pygame.sprite.Sprite):
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.img_path = cfg.TANCIK_PATHS['tank']
+        self.image = pygame.image.load(self.img_path)
+        self.location = (600, 550)
+        self.rect = self.image.get_rect()
+        self.rect.topleft = self.location
+        self.speed = 0
+        self.turbo = False
+        self.accelerated = False
+        print('init tancik')
+
+    def turn(self, num):
+        self.speed = num
+
+    def goTurbo(self):
+        if self.turbo is True and self.accelerated is False:
+            self.accelerated = True
+            self.speed = self.speed * 2
+
+
+    def move(self):
+        self.rect.left += self.speed
+        self.rect.left = max(0, self.rect.left)
+        self.rect.left = min(850, self.rect.left)
+
+        if self.speed < 0:
+            self.img_path = cfg.TANCIK_PATHS['tankl']
+            if self.turbo:
+                self.img_path = cfg.TANCIK_PATHS['tanklt']
+        if self.speed > 0:
+            self.img_path = cfg.TANCIK_PATHS['tankr']
+            if self.turbo:
+                self.img_path = cfg.TANCIK_PATHS['tankrt']
+        if self.speed == 0:
+            self.img_path = cfg.TANCIK_PATHS['tank']
+        self.image = pygame.image.load(self.img_path)
+
+
 class GroundClass(pygame.sprite.Sprite):
 
     def __init__(self, img_path, location):
@@ -14,24 +55,29 @@ class GroundClass(pygame.sprite.Sprite):
         self.rect.topleft = self.location
 
 
-def updateFrame(screen):
+def updateFrame(screen, tancik):
     screen.fill(cfg.COLOR_SKY)
-
     paintGrass(screen)
-
+    screen.blit(tancik.image, tancik.rect)
     pygame.display.update()
 
 
 def paintGrass(screen):
-
     grounds = pygame.sprite.Group()
 
     for i in range(cfg.WIDTH // cfg.TILE_SIZE):
-        location = [i*cfg.TILE_SIZE, 600]
+        location = [i * cfg.TILE_SIZE, 600]
         img_path = cfg.LANDSCAPE_PATHS['grass1']
         ground = GroundClass(img_path, location)
         grounds.add(ground)
     grounds.draw(screen)
+
+
+def ShowPlaygroundScreen(screen, tancik):
+    screen.fill(cfg.COLOR_SKY)
+    paintGrass(screen)
+    screen.blit(tancik.image, tancik.rect)
+    pygame.display.update()
 
 
 def ShowStartInterface(screen, screensize):
@@ -63,7 +109,11 @@ def main():
     screen = pygame.display.set_mode(cfg.SCREENSIZE)
     pygame.display.set_caption('Skier Game')
     ShowStartInterface(screen, cfg.SCREENSIZE)
+    # init Tancik
+    tancik = TancikClass()
+    ShowPlaygroundScreen(screen, tancik)
 
+    clock = pygame.time.Clock()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -71,11 +121,18 @@ def main():
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                    print("a")
+                    tancik.turn(-2)
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    print("d")
+                    tancik.turn(2)
+                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                    tancik.turn(0)
+                if event.key == pygame.K_SPACE:
+                    tancik.turbo = True
+                    tancik.goTurbo()
 
-        updateFrame(screen)
+        tancik.move()
+        updateFrame(screen, tancik)
+        clock.tick(cfg.FPS)
 
 
 # Press the green button in the gutter to run the script.
