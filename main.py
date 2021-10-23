@@ -14,23 +14,42 @@ class TancikClass(pygame.sprite.Sprite):
         self.rect.topleft = self.location
         self.speed = 0
         self.turbo = False
-        self.accelerated = False
+        self.turbo_fuel = 0
+        self.turbo_charging = 0
+        self.charged = True
         print('init tancik')
 
     def turn(self, num):
         self.speed = num
 
     def goTurbo(self):
-        if self.turbo is True and self.accelerated is False:
-            self.accelerated = True
-            self.speed = self.speed * 2
-
+        self.turbo = True
+        self.charged = False
+        self.speed = self.speed * 2
+        self.turbo_fuel = 60
 
     def move(self):
+        # odpocet turba
+        if self.turbo_fuel > 0:
+            self.turbo_fuel -= 1
+            if self.turbo_fuel == 0:
+                self.speed = self.speed // 2
+                self.turbo = False
+
+        # nabijeni
+        if self.charged is False:
+            self.turbo_charging += 1
+            if self.turbo_charging == 120:
+                self.turbo_charging = 0
+                self.charged = True
+
+
+        # pohyb
         self.rect.left += self.speed
         self.rect.left = max(0, self.rect.left)
         self.rect.left = min(850, self.rect.left)
 
+        # prirazeni ikonky
         if self.speed < 0:
             self.img_path = cfg.TANCIK_PATHS['tankl']
             if self.turbo:
@@ -58,6 +77,15 @@ class GroundClass(pygame.sprite.Sprite):
 def updateFrame(screen, tancik):
     screen.fill(cfg.COLOR_SKY)
     paintGrass(screen)
+
+    if tancik.charged is True:
+        img_path = cfg.ICON_PATHS['turbo']
+        location = [850, 600]
+        turbo = GroundClass(img_path, location)
+        icons = pygame.sprite.Group()
+        icons.add(turbo)
+        icons.draw(screen)
+
     screen.blit(tancik.image, tancik.rect)
     pygame.display.update()
 
@@ -120,14 +148,13 @@ def main():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                if event.key == pygame.K_LEFT and tancik.turbo is False:
                     tancik.turn(-2)
-                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                if event.key == pygame.K_RIGHT and tancik.turbo is False:
                     tancik.turn(2)
-                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                if event.key == pygame.K_DOWN and tancik.turbo is False:
                     tancik.turn(0)
-                if event.key == pygame.K_SPACE:
-                    tancik.turbo = True
+                if event.key == pygame.K_x and tancik.turbo is False and tancik.charged is True:
                     tancik.goTurbo()
 
         tancik.move()

@@ -21,4 +21,8 @@ LANDSCAPE_PATHS = {
     'grass1': os.path.join(os.getcwd(), 'resources/images/grass1.png')
 }
 
+ICON_PATHS = {
+    'turbo': os.path.join(os.getcwd(), 'resources/images/turbo.png')
+}
+
 FONTPATH = os.path.join(os.getcwd(), 'resources/font/FZSTK.TTF')
