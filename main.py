@@ -1,6 +1,9 @@
 import pygame
 import cfg
 import sys
+from ground import GroundClass
+from tancik import TancikClass
+from shoot import ShootClass
 
 # Ikonky nabijeni turba
 # Strileni
@@ -10,100 +13,25 @@ import sys
 # penize
 
 
-class TancikClass(pygame.sprite.Sprite):
-
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.img_path = cfg.TANCIK_PATHS['tank']
-        self.image = pygame.image.load(self.img_path)
-        self.location = (600, 550)
-        self.rect = self.image.get_rect()
-        self.rect.topleft = self.location
-        self.speed = 0
-        self.turbo = False
-        self.turbo_fuel = 0
-        self.turbo_charging = 0
-        self.charged = True
-        print('init tancik')
-
-    def turn(self, num):
-        self.speed = num
-
-    def goTurbo(self):
-        self.turbo = True
-        self.charged = False
-        self.speed = self.speed * 2
-        self.turbo_fuel = cfg.PARAM_TURBO_FUEL
-
-    def move(self):
-        # odpocet turba
-        self.__countdown_turbo()
-        # nabijeni
-        self.__charge_turbo()
-        # pohyb
-        self.__do_step()
-        # prirazeni ikonky
-        self.__icon()
-
-    def __countdown_turbo(self):
-        if self.turbo_fuel > 0:
-            self.turbo_fuel -= 1
-            if self.turbo_fuel == 0:
-                self.speed = self.speed // 2
-                self.turbo = False
-
-    def __charge_turbo(self):
-        if self.charged is False:
-            self.turbo_charging += 1
-            if self.turbo_charging == cfg.PARAM_TURBO_CHARGE:
-                self.turbo_charging = 0
-                self.charged = True
-
-    def __do_step(self):
-        self.rect.left += self.speed
-        self.rect.left = max(0, self.rect.left)
-        self.rect.left = min(850, self.rect.left)
-
-    def __icon(self):
-        if self.speed < 0:
-            self.img_path = cfg.TANCIK_PATHS['tankl']
-            if self.turbo:
-                self.img_path = cfg.TANCIK_PATHS['tanklt']
-        if self.speed > 0:
-            self.img_path = cfg.TANCIK_PATHS['tankr']
-            if self.turbo:
-                self.img_path = cfg.TANCIK_PATHS['tankrt']
-        if self.speed == 0:
-            self.img_path = cfg.TANCIK_PATHS['tank']
-        self.image = pygame.image.load(self.img_path)
+def create_shoot(tancik, tancik_shoots):
+    location = tancik.get_shoot_midbottom(9)
+    img_path = cfg.SHOOT_PATHS['tshoot']
+    shoot = ShootClass(img_path, location, 5)
+    tancik_shoots.add(shoot)
 
 
-class GroundClass(pygame.sprite.Sprite):
-
-    def __init__(self, img_path, location):
-        pygame.sprite.Sprite.__init__(self)
-        self.img_path = img_path
-        self.image = pygame.image.load(self.img_path)
-        self.location = location
-        self.rect = self.image.get_rect()
-        self.rect.topleft = self.location
-
-class ShootClass(pygame.sprite.Sprite):
-
-    def __init__(self, img_path, location):
-        #TODO
-        pygame.sprite.Sprite.__init__(self)
-        self.img_path = img_path
-        self.image = pygame.image.load(self.img_path)
-        self.location = location
-        self.rect = self.image.get_rect()
-        self.rect.topleft = self.location
+def moove_shoots(tancik_shoots):
+    for shoot in tancik_shoots:
+        shoot.move()
+        if shoot.is_too_high():
+            tancik_shoots.remove(shoot)
 
 
-def updateFrame(screen, tancik):
+def updateFrame(screen, tancik, tancik_shoots):
     screen.fill(cfg.COLOR_SKY)
     paintGrass(screen)
     paintTurbo(screen, tancik)
+    tancik_shoots.draw(screen)
     screen.blit(tancik.image, tancik.rect)
     pygame.display.update()
 
@@ -167,6 +95,7 @@ def main():
     ShowStartInterface(screen, cfg.SCREENSIZE)
     # init Tancik
     tancik = TancikClass()
+    tancik_shoots = pygame.sprite.Group()
     ShowPlaygroundScreen(screen, tancik)
 
     clock = pygame.time.Clock()
@@ -184,9 +113,12 @@ def main():
                     tancik.turn(0)
                 if event.key == pygame.K_x and tancik.turbo is False and tancik.charged is True:
                     tancik.goTurbo()
+                if event.key == pygame.K_SPACE:
+                    create_shoot(tancik, tancik_shoots)
 
         tancik.move()
-        updateFrame(screen, tancik)
+        moove_shoots(tancik_shoots)
+        updateFrame(screen, tancik, tancik_shoots)
         clock.tick(cfg.FPS)
 
 
