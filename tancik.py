@@ -16,6 +16,8 @@ class TancikClass(pygame.sprite.Sprite):
         self.turbo_fuel = 0
         self.turbo_charging = 0
         self.charged = True
+        self.loaded = True
+        self.reload = 0
         print('init tancik')
 
     def turn(self, num):
@@ -27,7 +29,14 @@ class TancikClass(pygame.sprite.Sprite):
         self.speed = self.speed * 2
         self.turbo_fuel = cfg.PARAM_TURBO_FUEL
 
+    def get_shoot_midbottom(self, size):
+        self.reload = 40
+        self.loaded = False
+        return [self.rect.midtop[0], self.rect.midtop[1] + size]
+
     def move(self):
+        # nabijeni
+        self.__reloading()
         # odpocet turba
         self.__countdown_turbo()
         # nabijeni
@@ -37,8 +46,11 @@ class TancikClass(pygame.sprite.Sprite):
         # prirazeni ikonky
         self.__icon()
 
-    def get_shoot_midbottom(self, size):
-        return [self.rect.midtop[0], self.rect.midtop[1] + size]
+    def __reloading(self):
+        if self.reload > 0:
+            self.reload -= 1
+            if self.reload == 0:
+                self.loaded = True
 
     def __countdown_turbo(self):
         if self.turbo_fuel > 0:

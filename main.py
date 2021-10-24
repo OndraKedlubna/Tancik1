@@ -5,7 +5,6 @@ from ground import GroundClass
 from tancik import TancikClass
 from shoot import ShootClass
 
-# Ikonky nabijeni turba
 # Strileni
 # Nepratelska raketa
 # pocitac skore
@@ -31,6 +30,7 @@ def updateFrame(screen, tancik, tancik_shoots):
     screen.fill(cfg.COLOR_SKY)
     paintGrass(screen)
     paintTurbo(screen, tancik)
+    paintShoot(screen, tancik)
     tancik_shoots.draw(screen)
     screen.blit(tancik.image, tancik.rect)
     pygame.display.update()
@@ -43,6 +43,16 @@ def paintTurbo(screen, tancik):
         turbo = GroundClass(img_path, location)
         icons = pygame.sprite.Group()
         icons.add(turbo)
+        icons.draw(screen)
+
+
+def paintShoot(screen, tancik):
+    if tancik.loaded is True:
+        img_path = cfg.ICON_PATHS['ishoot']
+        location = [800, 600]
+        ishoot = GroundClass(img_path, location)
+        icons = pygame.sprite.Group()
+        icons.add(ishoot)
         icons.draw(screen)
 
 
@@ -113,7 +123,7 @@ def main():
                     tancik.turn(0)
                 if event.key == pygame.K_x and tancik.turbo is False and tancik.charged is True:
                     tancik.goTurbo()
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and tancik.loaded is True:
                     create_shoot(tancik, tancik_shoots)
 
         tancik.move()

@@ -25,7 +25,8 @@ LANDSCAPE_PATHS = {
 }
 
 ICON_PATHS = {
-    'turbo': os.path.join(os.getcwd(), 'resources/images/turbo.png')
+    'turbo': os.path.join(os.getcwd(), 'resources/images/turbo.png'),
+    'ishoot': os.path.join(os.getcwd(), 'resources/images/ishoot.png')
 }
 
 SHOOT_PATHS = {
