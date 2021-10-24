@@ -2,6 +2,13 @@ import pygame
 import cfg
 import sys
 
+# Ikonky nabijeni turba
+# Strileni
+# Nepratelska raketa
+# pocitac skore
+# pocitac penez
+# penize
+
 
 class TancikClass(pygame.sprite.Sprite):
 
@@ -26,30 +33,38 @@ class TancikClass(pygame.sprite.Sprite):
         self.turbo = True
         self.charged = False
         self.speed = self.speed * 2
-        self.turbo_fuel = 60
+        self.turbo_fuel = cfg.PARAM_TURBO_FUEL
 
     def move(self):
         # odpocet turba
+        self.__countdown_turbo()
+        # nabijeni
+        self.__charge_turbo()
+        # pohyb
+        self.__do_step()
+        # prirazeni ikonky
+        self.__icon()
+
+    def __countdown_turbo(self):
         if self.turbo_fuel > 0:
             self.turbo_fuel -= 1
             if self.turbo_fuel == 0:
                 self.speed = self.speed // 2
                 self.turbo = False
 
-        # nabijeni
+    def __charge_turbo(self):
         if self.charged is False:
             self.turbo_charging += 1
-            if self.turbo_charging == 120:
+            if self.turbo_charging == cfg.PARAM_TURBO_CHARGE:
                 self.turbo_charging = 0
                 self.charged = True
 
-
-        # pohyb
+    def __do_step(self):
         self.rect.left += self.speed
         self.rect.left = max(0, self.rect.left)
         self.rect.left = min(850, self.rect.left)
 
-        # prirazeni ikonky
+    def __icon(self):
         if self.speed < 0:
             self.img_path = cfg.TANCIK_PATHS['tankl']
             if self.turbo:
@@ -73,11 +88,27 @@ class GroundClass(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = self.location
 
+class ShootClass(pygame.sprite.Sprite):
+
+    def __init__(self, img_path, location):
+        #TODO
+        pygame.sprite.Sprite.__init__(self)
+        self.img_path = img_path
+        self.image = pygame.image.load(self.img_path)
+        self.location = location
+        self.rect = self.image.get_rect()
+        self.rect.topleft = self.location
+
 
 def updateFrame(screen, tancik):
     screen.fill(cfg.COLOR_SKY)
     paintGrass(screen)
+    paintTurbo(screen, tancik)
+    screen.blit(tancik.image, tancik.rect)
+    pygame.display.update()
 
+
+def paintTurbo(screen, tancik):
     if tancik.charged is True:
         img_path = cfg.ICON_PATHS['turbo']
         location = [850, 600]
@@ -85,9 +116,6 @@ def updateFrame(screen, tancik):
         icons = pygame.sprite.Group()
         icons.add(turbo)
         icons.draw(screen)
-
-    screen.blit(tancik.image, tancik.rect)
-    pygame.display.update()
 
 
 def paintGrass(screen):
