@@ -4,8 +4,8 @@ import sys
 from ground import GroundClass
 from tancik import TancikClass
 from shoot import ShootClass
+from info import InfoClass
 
-# Strileni
 # Nepratelska raketa
 # pocitac skore
 # pocitac penez
@@ -97,6 +97,11 @@ def ShowStartInterface(screen, screensize):
             pygame.display.update()
 
 
+def update_ships(info):
+    if len(info.enemies) + len(info.enemies_names) == 0:
+        pass
+
+
 def main():
     pygame.init()
 
@@ -105,6 +110,10 @@ def main():
     ShowStartInterface(screen, cfg.SCREENSIZE)
     # init Tancik
     tancik = TancikClass()
+    # promene hry
+    info = InfoClass()
+    debug_time = 0
+    # seznamy init
     tancik_shoots = pygame.sprite.Group()
     ShowPlaygroundScreen(screen, tancik)
 
@@ -128,8 +137,17 @@ def main():
 
         tancik.move()
         moove_shoots(tancik_shoots)
+        update_ships(info)
+        #Zkontrolovat, jestli je level vycisten
+        #nahrat dalsi level nebo viteznou obrazovku
         updateFrame(screen, tancik, tancik_shoots)
         clock.tick(cfg.FPS)
+
+        debug_time += 1
+        if debug_time % 40 == 0:
+            print(str(info.enemies))
+            print(str(info.enemies_names))
+            print(str(len(info.enemies_names)))
 
 
 # Press the green button in the gutter to run the script.

@@ -16,4 +16,4 @@ class ShootClass(pygame.sprite.Sprite):
         self.rect.bottom -= self.speed
 
     def is_too_high(self):
-        return self.rect.centery < 200
+        return self.rect.centery < 100

@@ -12,6 +12,14 @@ COLOR_SKY = (133, 193, 233)
 PARAM_TURBO_CHARGE = 200
 PARAM_TURBO_FUEL = 60
 
+MAX_LEVEL = 1
+
+LEVELS = {
+    1: {
+        'minions': 5
+    }
+}
+
 TANCIK_PATHS = {
     'tank': os.path.join(os.getcwd(), 'resources/images/tank.png'),
     'tankl': os.path.join(os.getcwd(), 'resources/images/tankl.png'),
@@ -31,6 +39,11 @@ ICON_PATHS = {
 
 SHOOT_PATHS = {
     'tshoot': os.path.join(os.getcwd(), 'resources/images/tshoot.png')
+}
+
+ENEMIES_PATHS = {
+    'eminion': os.path.join(os.getcwd(), 'resources/images/eminion.png'),
+    'eminionD': os.path.join(os.getcwd(), 'resources/images/eminionD.png')
 }
 
 FONTPATH = os.path.join(os.getcwd(), 'resources/font/FZSTK.TTF')
