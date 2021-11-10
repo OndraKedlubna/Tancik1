@@ -16,8 +16,12 @@ MAX_LEVEL = 1
 
 LEVELS = {
     1: {
-        'minions': 5
+        'eminion': 5,
     }
+}
+
+ENEMIES_LIMIT = {
+    1: 1
 }
 
 TANCIK_PATHS = {

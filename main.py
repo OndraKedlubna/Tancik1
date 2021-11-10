@@ -98,8 +98,13 @@ def ShowStartInterface(screen, screensize):
 
 
 def update_ships(info):
-    if len(info.enemies) + len(info.enemies_names) == 0:
-        pass
+    info.add_enemy()
+
+
+def update_level(info):
+    if info.is_clean():
+        info.increase_level()
+
 
 
 def main():
@@ -138,8 +143,11 @@ def main():
         tancik.move()
         moove_shoots(tancik_shoots)
         update_ships(info)
-        #Zkontrolovat, jestli je level vycisten
-        #nahrat dalsi level nebo viteznou obrazovku
+        #TODO vitezna obrazovka
+        update_level(info) #Vrat jestli je konec hry
+
+        #TODO dopln nepratele 1, na nejakou pozici, 2, doplnit strileni a kolize 3, rozpohybovat je
+
         updateFrame(screen, tancik, tancik_shoots)
         clock.tick(cfg.FPS)
 
@@ -147,7 +155,10 @@ def main():
         if debug_time % 40 == 0:
             print(str(info.enemies))
             print(str(info.enemies_names))
-            print(str(len(info.enemies_names)))
+            print('enemies_count: ' + str(len(info.enemies_names)))
+            print('level: ' + str(info.level))
+            print('enemies_limit: ' + str(info.level))
+            print('------------------------------')
 
 
 # Press the green button in the gutter to run the script.
