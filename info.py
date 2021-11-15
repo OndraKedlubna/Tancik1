@@ -31,4 +31,4 @@ class InfoClass():
             self.enemies_names.remove(enemy_name)
             print(str(self.enemies_names))
             if enemy_name == 'eminion':
-                self.enemies.add(EShipClass(cfg.ENEMIES_PATHS['eminion'], (100, 550), 0, 0, 0))
+                self.enemies.add(EShipClass('eminion', (600, 300), 0, 0, 0))

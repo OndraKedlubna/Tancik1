@@ -26,12 +26,13 @@ def moove_shoots(tancik_shoots):
             tancik_shoots.remove(shoot)
 
 
-def updateFrame(screen, tancik, tancik_shoots):
+def updateFrame(screen, tancik, tancik_shoots, enemies):
     screen.fill(cfg.COLOR_SKY)
     paintGrass(screen)
     paintTurbo(screen, tancik)
     paintShoot(screen, tancik)
     tancik_shoots.draw(screen)
+    enemies.draw(screen)
     screen.blit(tancik.image, tancik.rect)
     pygame.display.update()
 
@@ -97,8 +98,12 @@ def ShowStartInterface(screen, screensize):
             pygame.display.update()
 
 
-def update_ships(info):
+def update_ships(info, tancik_shoots):
     info.add_enemy()
+    hitted_enemies = pygame.sprite.groupcollide(info.enemies, tancik_shoots, False, False)
+    if len(hitted_enemies) > 0:
+        for enemy in hitted_enemies:
+            enemy.die()
 
 
 def update_level(info):
@@ -111,7 +116,7 @@ def main():
     pygame.init()
 
     screen = pygame.display.set_mode(cfg.SCREENSIZE)
-    pygame.display.set_caption('Skier Game')
+    pygame.display.set_caption('Tancik')
     ShowStartInterface(screen, cfg.SCREENSIZE)
     # init Tancik
     tancik = TancikClass()
@@ -142,13 +147,13 @@ def main():
 
         tancik.move()
         moove_shoots(tancik_shoots)
-        update_ships(info)
+        update_ships(info, tancik_shoots)
         #TODO vitezna obrazovka
         update_level(info) #Vrat jestli je konec hry
 
         #TODO dopln nepratele 1, na nejakou pozici, 2, doplnit strileni a kolize 3, rozpohybovat je
 
-        updateFrame(screen, tancik, tancik_shoots)
+        updateFrame(screen, tancik, tancik_shoots, info.enemies)
         clock.tick(cfg.FPS)
 
         debug_time += 1
