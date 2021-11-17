@@ -27,8 +27,17 @@ class InfoClass():
     def add_enemy(self):
         if len(self.enemies) < self.enemies_limit and len(self.enemies_names) > 0:
             enemy_name = random.choice(self.enemies_names)
+            print('adding')
             print(str(self.enemies_names))
             self.enemies_names.remove(enemy_name)
             print(str(self.enemies_names))
             if enemy_name == 'eminion':
-                self.enemies.add(EShipClass('eminion', (600, 300), 0, 0, 0))
+                self.enemies.add(EShipClass('eminion', (random.randint(0, 850), 300), 0))
+
+    def clean_enemies(self):
+        for enemy in self.enemies:
+            if not enemy.is_live:
+                if enemy.decrease_live():
+                    self.enemies.remove(enemy)
+
+

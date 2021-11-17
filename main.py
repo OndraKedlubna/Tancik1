@@ -100,10 +100,14 @@ def ShowStartInterface(screen, screensize):
 
 def update_ships(info, tancik_shoots):
     info.add_enemy()
+    for enemy in info.enemies:
+        enemy.move()
     hitted_enemies = pygame.sprite.groupcollide(info.enemies, tancik_shoots, False, False)
     if len(hitted_enemies) > 0:
         for enemy in hitted_enemies:
             enemy.die()
+    #nejspis je problem ze se objevi hned dalsi
+    info.clean_enemies()
 
 
 def update_level(info):
@@ -151,7 +155,7 @@ def main():
         #TODO vitezna obrazovka
         update_level(info) #Vrat jestli je konec hry
 
-        #TODO dopln nepratele 1, na nejakou pozici, 2, doplnit strileni a kolize 3, rozpohybovat je
+        #TODO vertikalni pohyb pro nepratele, vitezna obrazovka
 
         updateFrame(screen, tancik, tancik_shoots, info.enemies)
         clock.tick(cfg.FPS)
