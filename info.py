@@ -6,8 +6,9 @@ from eship import EShipClass
 
 class InfoClass():
 
-    def __init__(self):
+    def __init__(self, difficulty):
         self.level = 0
+        self.difficulty = difficulty
         self.enemies_limit = 0
         self.enemies_names = []
         self.enemies = pygame.sprite.Group()
@@ -24,7 +25,7 @@ class InfoClass():
         for enemy in level_map.keys():
             for n in range(level_map.get(enemy)):
                 self.enemies_names.append(enemy)
-        self.enemies_limit = cfg.ENEMIES_LIMIT.get(self.level)
+        self.enemies_limit = cfg.ENEMIES_LIMIT.get(self.level) * self.difficulty
         return False
 
     def add_enemy(self):

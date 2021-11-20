@@ -88,13 +88,29 @@ def ShowStartInterface(screen, screensize):
     screen.blit(title, trect)
     screen.blit(content, crect)
 
+    dif1 = cfont.render(u'Pro pokracovani zvol obtiznost', True, (0, 200, 0))
+    dif2 = cfont.render(u'P - porucik Hubert Gruber', True, (0, 200, 0))
+    dif3 = cfont.render(u'G - general Heinz Guderian', True, (0, 200, 0))
+    d1rect = dif1.get_rect()
+    d2rect = dif2.get_rect()
+    d3rect = dif3.get_rect()
+    d1rect.midtop = (screensize[0] / 2, screensize[1] * 6 / 9)
+    d2rect.midtop = (screensize[0] / 2, screensize[1] * 7 / 9)
+    d3rect.midtop = (screensize[0] / 2, screensize[1] * 8 / 9)
+    screen.blit(dif1, d1rect)
+    screen.blit(dif2, d2rect)
+    screen.blit(dif3, d3rect)
+
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                return
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                return 1
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_g:
+                return 2
             pygame.display.update()
 
 
@@ -148,11 +164,11 @@ def main():
 
     screen = pygame.display.set_mode(cfg.SCREENSIZE)
     pygame.display.set_caption('Tancik')
-    ShowStartInterface(screen, cfg.SCREENSIZE)
+    difficulty = ShowStartInterface(screen, cfg.SCREENSIZE)
     # init Tancik
     tancik = TancikClass()
     # promene hry
-    info = InfoClass()
+    info = InfoClass(difficulty)
     debug_time = 0
     # seznamy init
     tancik_shoots = pygame.sprite.Group()
@@ -181,7 +197,7 @@ def main():
         update_ships(info, tancik_shoots)
         update_level(info, screen) #Vrat jestli je konec hry
 
-        #TODO vertikalni pohyb pro nepratele, vitezna obrazovka
+        #TODO pocitac skore zobrazeni, nastavit skore
 
         updateFrame(screen, tancik, tancik_shoots, info.enemies)
         clock.tick(cfg.FPS)
