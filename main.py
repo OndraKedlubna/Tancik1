@@ -80,7 +80,7 @@ def ShowStartInterface(screen, screensize):
     tfont = pygame.font.Font(cfg.FONTPATH, screensize[0] // 5)
     cfont = pygame.font.Font(cfg.FONTPATH, screensize[0] // 20)
     title = tfont.render(u'Tancik', True, (0, 128, 0))
-    content = cfont.render(u'Press any key to start', True, (0, 200, 0))
+    content = cfont.render(u'Pro pokracovani zmackni libovolnou klavesu', True, (0, 200, 0))
     trect = title.get_rect()
     trect.midtop = (screensize[0] / 2, screensize[1] / 5)
     crect = content.get_rect()
@@ -98,6 +98,33 @@ def ShowStartInterface(screen, screensize):
             pygame.display.update()
 
 
+def ShowEndInterface(screen, screensize, win):
+    screen.fill((255, 255, 255))
+    message = u'Hanba! Znicil jsi drahy tank, prohral jsi!'
+    if win:
+        message = u'Gratulace! Nepratele jsou mrtvi, vyhral jsi!'
+    cfont = pygame.font.Font(cfg.FONTPATH, screensize[0] // 20)
+    if win:
+        content = cfont.render(message, True, (0, 200, 0))
+        crect = content.get_rect()
+        crect.midtop = (screensize[0] / 2, screensize[1] / 2)
+        screen.blit(content, crect)
+    content2 = cfont.render(u'Stisknutim klavesy Q to cele skoncis', True, (0, 200, 0))
+    crect2 = content2.get_rect()
+    crect2.midtop = (screensize[0] / 2, screensize[1] * 3 / 4)
+    screen.blit(content2, crect2)
+    pygame.display.update()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+                pygame.quit()
+                sys.exit()
+            pygame.display.update()
+
 def update_ships(info, tancik_shoots):
     info.add_enemy()
     for enemy in info.enemies:
@@ -106,13 +133,13 @@ def update_ships(info, tancik_shoots):
     if len(hitted_enemies) > 0:
         for enemy in hitted_enemies:
             enemy.die()
-    #nejspis je problem ze se objevi hned dalsi
     info.clean_enemies()
 
 
-def update_level(info):
+def update_level(info, screen):
     if info.is_clean():
-        info.increase_level()
+        if info.increase_level():
+            ShowEndInterface(screen, cfg.SCREENSIZE, True)
 
 
 
@@ -152,8 +179,7 @@ def main():
         tancik.move()
         moove_shoots(tancik_shoots)
         update_ships(info, tancik_shoots)
-        #TODO vitezna obrazovka
-        update_level(info) #Vrat jestli je konec hry
+        update_level(info, screen) #Vrat jestli je konec hry
 
         #TODO vertikalni pohyb pro nepratele, vitezna obrazovka
 

@@ -14,9 +14,16 @@ PARAM_TURBO_FUEL = 60
 
 MAX_LEVEL = 1
 
+ENEMIES = {
+    'eminion': {
+        'speedx': 2,
+        'speedy': 2
+    }
+}
+
 LEVELS = {
     1: {
-        'eminion': 5,
+        'eminion': 1,
     }
 }
 

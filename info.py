@@ -17,12 +17,15 @@ class InfoClass():
             return True
 
     def increase_level(self):
+        if self.level == cfg.MAX_LEVEL:
+            return True
         self.level += 1
         level_map = cfg.LEVELS.get(self.level)
         for enemy in level_map.keys():
             for n in range(level_map.get(enemy)):
                 self.enemies_names.append(enemy)
         self.enemies_limit = cfg.ENEMIES_LIMIT.get(self.level)
+        return False
 
     def add_enemy(self):
         if len(self.enemies) < self.enemies_limit and len(self.enemies_names) > 0:
