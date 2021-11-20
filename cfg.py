@@ -17,7 +17,7 @@ MAX_LEVEL = 1
 ENEMIES = {
     'eminion': {
         'speedx': 2,
-        'speedy': 2
+        'speedy': 4
     }
 }
 
