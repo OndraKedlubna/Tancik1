@@ -23,7 +23,7 @@ ENEMIES = {
 
 LEVELS = {
     1: {
-        'eminion': 5,
+        'eminion': 4,
     }
 }
 

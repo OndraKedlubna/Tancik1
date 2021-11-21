@@ -6,8 +6,6 @@ from tancik import TancikClass
 from shoot import ShootClass
 from info import InfoClass
 
-# Nepratelska raketa
-# pocitac skore
 # pocitac penez
 # penize
 
@@ -26,15 +24,22 @@ def moove_shoots(tancik_shoots):
             tancik_shoots.remove(shoot)
 
 
-def updateFrame(screen, tancik, tancik_shoots, enemies):
+def update_frame(screen, tancik, tancik_shoots, info):
     screen.fill(cfg.COLOR_SKY)
     paintGrass(screen)
     paintTurbo(screen, tancik)
     paintShoot(screen, tancik)
     tancik_shoots.draw(screen)
-    enemies.draw(screen)
+    info.enemies.draw(screen)
+    showScore(screen, info)
     screen.blit(tancik.image, tancik.rect)
     pygame.display.update()
+
+
+def showScore(screen, info, pos=(10, 10)):
+    font = pygame.font.Font(cfg.FONTPATH, 30)
+    score_text = font.render("Score: %s" % info.score, True, (0, 0, 0))
+    screen.blit(score_text, pos)
 
 
 def paintTurbo(screen, tancik):
@@ -114,17 +119,22 @@ def ShowStartInterface(screen, screensize):
             pygame.display.update()
 
 
-def ShowEndInterface(screen, screensize, win):
+def ShowEndInterface(info, screen, screensize, win):
     screen.fill((255, 255, 255))
     message = u'Hanba! Znicil jsi drahy tank, prohral jsi!'
     if win:
         message = u'Gratulace! Nepratele jsou mrtvi, vyhral jsi!'
+    else:
+        info.decrease_score(100)
     cfont = pygame.font.Font(cfg.FONTPATH, screensize[0] // 20)
-    if win:
-        content = cfont.render(message, True, (0, 200, 0))
-        crect = content.get_rect()
-        crect.midtop = (screensize[0] / 2, screensize[1] / 2)
-        screen.blit(content, crect)
+    score = cfont.render("Konecne score: %s" % info.score, True, (0, 0, 0))
+    srect = score.get_rect()
+    srect.midtop = (screensize[0] / 2, screensize[1] / 4)
+    screen.blit(score, srect)
+    content = cfont.render(message, True, (0, 200, 0))
+    crect = content.get_rect()
+    crect.midtop = (screensize[0] / 2, screensize[1] / 2)
+    screen.blit(content, crect)
     content2 = cfont.render(u'Stisknutim klavesy Q to cele skoncis', True, (0, 200, 0))
     crect2 = content2.get_rect()
     crect2.midtop = (screensize[0] / 2, screensize[1] * 3 / 4)
@@ -141,6 +151,7 @@ def ShowEndInterface(screen, screensize, win):
                 sys.exit()
             pygame.display.update()
 
+
 def update_ships(info, tancik_shoots):
     info.add_enemy()
     for enemy in info.enemies:
@@ -148,14 +159,14 @@ def update_ships(info, tancik_shoots):
     hitted_enemies = pygame.sprite.groupcollide(info.enemies, tancik_shoots, False, False)
     if len(hitted_enemies) > 0:
         for enemy in hitted_enemies:
-            enemy.die()
+            enemy.die(info)
     info.clean_enemies()
 
 
 def update_level(info, screen):
     if info.is_clean():
         if info.increase_level():
-            ShowEndInterface(screen, cfg.SCREENSIZE, True)
+            ShowEndInterface(info, screen, cfg.SCREENSIZE, True)
 
 
 
@@ -197,13 +208,12 @@ def main():
         update_ships(info, tancik_shoots)
         update_level(info, screen) #Vrat jestli je konec hry
 
-        #TODO pocitac skore zobrazeni, nastavit skore
-
-        updateFrame(screen, tancik, tancik_shoots, info.enemies)
+        update_frame(screen, tancik, tancik_shoots, info)
         clock.tick(cfg.FPS)
 
         debug_time += 1
         if debug_time % 40 == 0:
+            info.decrease_score(2)
             print(str(info.enemies))
             print(str(info.enemies_names))
             print('enemies_count: ' + str(len(info.enemies_names)))

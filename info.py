@@ -8,6 +8,7 @@ class InfoClass():
 
     def __init__(self, difficulty):
         self.level = 0
+        self.score = 400
         self.difficulty = difficulty
         self.enemies_limit = 0
         self.enemies_names = []
@@ -43,5 +44,11 @@ class InfoClass():
             if not enemy.is_live:
                 if enemy.decrease_live():
                     self.enemies.remove(enemy)
+
+    def decrease_score(self, amount):
+        self.score = self.score - amount
+
+    def increase_score(self, amount):
+        self.score = self.score + amount
 
 
