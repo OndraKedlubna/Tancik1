@@ -31,15 +31,18 @@ def update_frame(screen, tancik, tancik_shoots, info):
     paintShoot(screen, tancik)
     tancik_shoots.draw(screen)
     info.enemies.draw(screen)
-    showScore(screen, info)
+    show_score(screen, info)
     screen.blit(tancik.image, tancik.rect)
     pygame.display.update()
 
 
-def showScore(screen, info, pos=(10, 10)):
+def show_score(screen, info, pos=(10, 10), pos2=(200, 10)):
     font = pygame.font.Font(cfg.FONTPATH, 30)
     score_text = font.render("Score: %s" % info.score, True, (0, 0, 0))
     screen.blit(score_text, pos)
+    font = pygame.font.Font(cfg.FONTPATH, 30)
+    multiplier_text = font.render("X%s" % info.multiplier, True, (255, 0, 0))
+    screen.blit(multiplier_text, pos2)
 
 
 def paintTurbo(screen, tancik):
@@ -180,7 +183,7 @@ def main():
     tancik = TancikClass()
     # promene hry
     info = InfoClass(difficulty)
-    debug_time = 0
+    game_time = 0
     # seznamy init
     tancik_shoots = pygame.sprite.Group()
     ShowPlaygroundScreen(screen, tancik)
@@ -211,8 +214,12 @@ def main():
         update_frame(screen, tancik, tancik_shoots, info)
         clock.tick(cfg.FPS)
 
-        debug_time += 1
-        if debug_time % 40 == 0:
+        game_time += 1
+        info.multiplier_time = info.multiplier_time + 1
+        if info.multiplier_time % 150 == 0:
+            info.decrease_multiplier(1)
+
+        if game_time % 40 == 0:
             info.decrease_score(2)
             print(str(info.enemies))
             print(str(info.enemies_names))

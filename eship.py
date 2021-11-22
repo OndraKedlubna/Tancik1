@@ -28,7 +28,7 @@ class EShipClass(pygame.sprite.Sprite):
         if self.is_live:
             self.img_name = self.img_name + 'D'
             self.image = pygame.image.load(cfg.ENEMIES_PATHS[self.img_name])
-            info.increase_score(50)
+            info.increase_score(50, 3)
             self.is_live = False
 
     def decrease_live(self):
