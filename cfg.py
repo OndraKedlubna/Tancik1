@@ -17,13 +17,14 @@ MAX_LEVEL = 1
 ENEMIES = {
     'eminion': {
         'speedx': 2,
-        'speedy': 4
+        'speedy': 4,
+        'reload': 20,
     }
 }
 
 LEVELS = {
     1: {
-        'eminion': 4,
+        'eminion': 10,
     }
 }
 
@@ -49,7 +50,8 @@ ICON_PATHS = {
 }
 
 SHOOT_PATHS = {
-    'tshoot': os.path.join(os.getcwd(), 'resources/images/tshoot.png')
+    'tshoot': os.path.join(os.getcwd(), 'resources/images/tshoot.png'),
+    'teshoot': os.path.join(os.getcwd(), 'resources/images/teshoot.png')
 }
 
 ENEMIES_PATHS = {

@@ -1,6 +1,7 @@
 import pygame
 import random
 import cfg
+from shoot import ShootClass
 
 
 class EShipClass(pygame.sprite.Sprite):
@@ -12,6 +13,8 @@ class EShipClass(pygame.sprite.Sprite):
         self.location = location
         self.speedx = cfg.ENEMIES[img_name]['speedx']
         self.speedy = cfg.ENEMIES[img_name]['speedy']
+        self.reload = cfg.ENEMIES[img_name]['reload']
+        self.loaded = False
         self.speed_vertival_flag = False
         self.speed_vertival_target = 300
         self.way = 'down'
@@ -31,9 +34,23 @@ class EShipClass(pygame.sprite.Sprite):
             info.increase_score(50, 3)
             self.is_live = False
 
+    def get_shoot_midtop(self, size):
+        return [self.rect.midbottom[0], self.rect.midbottom[1] + size]
+
     def decrease_live(self):
         self.live = self.live - 1
         return self.live < 1
+
+    def process_shoot(self):
+        if self.is_live:
+            self.reload = self.reload - 1
+            if self.reload < 0:
+                if random.randint(0, 15) > 14:
+                    img_path = cfg.SHOOT_PATHS['teshoot']
+                    shoot = ShootClass(img_path, self.get_shoot_midtop(9), -5)
+                    self.reload = self.reload = cfg.ENEMIES[self.img_name]['reload']
+                    return shoot
+        return None
 
     def move(self):
         if self.is_live:

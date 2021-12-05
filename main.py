@@ -17,6 +17,12 @@ def create_shoot(tancik, tancik_shoots):
     tancik_shoots.add(shoot)
 
 
+def create_enemy_shoot(enemy, enemy_shoots):
+    shoot = enemy.process_shoot()
+    if shoot is not None:
+        enemy_shoots.add(shoot)
+
+
 def moove_shoots(tancik_shoots):
     for shoot in tancik_shoots:
         shoot.move()
@@ -24,12 +30,20 @@ def moove_shoots(tancik_shoots):
             tancik_shoots.remove(shoot)
 
 
-def update_frame(screen, tancik, tancik_shoots, info):
+def moove_enemy_shoots(enemy_shoots):
+    for shoot in enemy_shoots:
+        shoot.move()
+        if shoot.is_too_low():
+            enemy_shoots.remove(shoot)
+
+
+def update_frame(screen, tancik, tancik_shoots, info, enemy_shoots):
     screen.fill(cfg.COLOR_SKY)
     paintGrass(screen)
     paintTurbo(screen, tancik)
     paintShoot(screen, tancik)
     tancik_shoots.draw(screen)
+    enemy_shoots.draw(screen)
     info.enemies.draw(screen)
     show_score(screen, info)
     screen.blit(tancik.image, tancik.rect)
@@ -155,15 +169,22 @@ def ShowEndInterface(info, screen, screensize, win):
             pygame.display.update()
 
 
-def update_ships(info, tancik_shoots):
+def update_ships(info, tancik_shoots, enemy_shots):
     info.add_enemy()
     for enemy in info.enemies:
         enemy.move()
+        create_enemy_shoot(enemy, enemy_shots)
     hitted_enemies = pygame.sprite.groupcollide(info.enemies, tancik_shoots, False, False)
     if len(hitted_enemies) > 0:
         for enemy in hitted_enemies:
             enemy.die(info)
     info.clean_enemies()
+
+
+def update_tank(info, enemy_shots, tancik, screen):
+    hitted = pygame.sprite.spritecollide(tancik, enemy_shots, False)
+    if hitted:
+        ShowEndInterface(info, screen, cfg.SCREENSIZE, False)
 
 
 def update_level(info, screen):
@@ -186,6 +207,7 @@ def main():
     game_time = 0
     # seznamy init
     tancik_shoots = pygame.sprite.Group()
+    enemy_shoots = pygame.sprite.Group()
     ShowPlaygroundScreen(screen, tancik)
 
     clock = pygame.time.Clock()
@@ -208,10 +230,12 @@ def main():
 
         tancik.move()
         moove_shoots(tancik_shoots)
-        update_ships(info, tancik_shoots)
+        moove_enemy_shoots(enemy_shoots)
+        update_ships(info, tancik_shoots, enemy_shoots)
         update_level(info, screen) #Vrat jestli je konec hry
+        update_tank(info, enemy_shoots, tancik, screen)
 
-        update_frame(screen, tancik, tancik_shoots, info)
+        update_frame(screen, tancik, tancik_shoots, info, enemy_shoots)
         clock.tick(cfg.FPS)
 
         game_time += 1
