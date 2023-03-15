@@ -6,7 +6,7 @@ from tancik import TancikClass
 from shoot import ShootClass
 from info import InfoClass
 
-# pocitac penez
+# pocitac penezu
 # penize
 
 
