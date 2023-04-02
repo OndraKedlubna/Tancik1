@@ -2,7 +2,7 @@ import os
 
 FPS = 40
 
-WIDTH = 900
+WIDTH = 1000
 HEIGHT = 650
 TILE_SIZE = 50
 

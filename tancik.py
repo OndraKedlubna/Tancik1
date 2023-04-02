@@ -69,7 +69,7 @@ class TancikClass(pygame.sprite.Sprite):
     def __do_step(self):
         self.rect.left += self.speed
         self.rect.left = max(0, self.rect.left)
-        self.rect.left = min(850, self.rect.left)
+        self.rect.left = min(cfg.WIDTH - cfg.TILE_SIZE, self.rect.left)
 
     def __icon(self):
         if self.speed < 0:
