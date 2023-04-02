@@ -176,8 +176,10 @@ def update_ships(info, tancik_shoots, enemy_shots):
         create_enemy_shoot(enemy, enemy_shots)
     hitted_enemies = pygame.sprite.groupcollide(info.enemies, tancik_shoots, False, False)
     if len(hitted_enemies) > 0:
-        for enemy in hitted_enemies:
+        for enemy, shoots in hitted_enemies.items():
             enemy.die(info)
+            for shoot in shoots:
+                tancik_shoots.remove(shoot)
     info.clean_enemies()
 
 
@@ -217,16 +219,24 @@ def main():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT and tancik.turbo is False:
-                    tancik.turn(-2)
-                if event.key == pygame.K_RIGHT and tancik.turbo is False:
-                    tancik.turn(2)
+                # if event.key == pygame.K_LEFT and tancik.turbo is False:
+                #     tancik.turn(-2)
+                # if event.key == pygame.K_RIGHT and tancik.turbo is False:
+                #     tancik.turn(2)
                 if event.key == pygame.K_DOWN and tancik.turbo is False:
                     tancik.turn(0)
-                if event.key == pygame.K_x and tancik.turbo is False and tancik.charged is True:
+                if event.key == pygame.K_x and tancik.turbo is False and tancik.charged is True and tancik.speed != 0:
                     tancik.goTurbo()
                 if event.key == pygame.K_SPACE and tancik.loaded is True:
                     create_shoot(tancik, tancik_shoots)
+
+        if tancik.turbo is False:
+            tancik.turn(0)
+        key_pressed = pygame.key.get_pressed()
+        if key_pressed[pygame.K_LEFT] and tancik.turbo is False:
+            tancik.turn(-2)
+        if key_pressed[pygame.K_RIGHT] and tancik.turbo is False:
+            tancik.turn(2)
 
         tancik.move()
         moove_shoots(tancik_shoots)
