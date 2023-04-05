@@ -57,8 +57,8 @@ class EShipClass(pygame.sprite.Sprite):
             if not self.speed_vertival_flag:
                 self.rect.left += self.cspeedx
                 self.rect.left = max(0, self.rect.left)
-                self.rect.left = min(850, self.rect.left)
-                if self.rect.left == 0 or self.rect.left == 850:
+                self.rect.left = min(cfg.WIDTH - cfg.TILE_SIZE, self.rect.left)
+                if self.rect.left == 0 or self.rect.left == cfg.WIDTH - cfg.TILE_SIZE:
                     self.speed_vertival_flag = True
                     self.speed_vertival_target = random.randint(0, 400) + 50
                     if self.rect.top > self.speed_vertival_target:

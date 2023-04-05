@@ -62,7 +62,7 @@ def show_score(screen, info, pos=(10, 10), pos2=(200, 10)):
 def paintTurbo(screen, tancik):
     if tancik.charged is True:
         img_path = cfg.ICON_PATHS['turbo']
-        location = [850, 600]
+        location = [cfg.WIDTH - cfg.TILE_SIZE * 1, cfg.HEIGHT - cfg.TILE_SIZE]
         turbo = GroundClass(img_path, location)
         icons = pygame.sprite.Group()
         icons.add(turbo)
@@ -72,7 +72,7 @@ def paintTurbo(screen, tancik):
 def paintShoot(screen, tancik):
     if tancik.loaded is True:
         img_path = cfg.ICON_PATHS['ishoot']
-        location = [800, 600]
+        location = [cfg.WIDTH - cfg.TILE_SIZE * 2, cfg.HEIGHT - cfg.TILE_SIZE]
         ishoot = GroundClass(img_path, location)
         icons = pygame.sprite.Group()
         icons.add(ishoot)
@@ -169,6 +169,31 @@ def ShowEndInterface(info, screen, screensize, win):
             pygame.display.update()
 
 
+def show_workshop(screen):
+    workshop = True
+    screen.fill((255, 255, 255))
+
+    mfont = pygame.font.Font(cfg.FONTPATH, cfg.TILE_SIZE)
+    sfont = pygame.font.Font(cfg.FONTPATH, cfg.TILE_SIZE //2 )
+    minfo = mfont.render("Dilna", True, (0, 128, 0))
+    minfo2 = sfont.render("Zde muzou totalne nasazeni mechanici vylepsit tvuj tank", True, (0, 128, 0))
+
+   ## tohle dej do metody
+    crect = minfo.get_rect()
+    crect.midtop = (cfg.SCREENSIZE[0] / 2, cfg.TILE_SIZE)
+    screen.blit(minfo, crect)
+
+    crect = minfo2.get_rect()
+    crect.midtop = (cfg.SCREENSIZE[0] / 2, cfg.TILE_SIZE * 2)
+    screen.blit(minfo2, crect)
+
+    while workshop:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_w:
+                workshop = False
+            pygame.display.update()
+
+
 def update_ships(info, tancik_shoots, enemy_shots):
     info.add_enemy()
     for enemy in info.enemies:
@@ -176,8 +201,10 @@ def update_ships(info, tancik_shoots, enemy_shots):
         create_enemy_shoot(enemy, enemy_shots)
     hitted_enemies = pygame.sprite.groupcollide(info.enemies, tancik_shoots, False, False)
     if len(hitted_enemies) > 0:
-        for enemy in hitted_enemies:
+        for enemy, shoots in hitted_enemies.items():
             enemy.die(info)
+            for shoot in shoots:
+                tancik_shoots.remove(shoot)
     info.clean_enemies()
 
 
@@ -217,16 +244,26 @@ def main():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT and tancik.turbo is False:
-                    tancik.turn(-2)
-                if event.key == pygame.K_RIGHT and tancik.turbo is False:
-                    tancik.turn(2)
+                # if event.key == pygame.K_LEFT and tancik.turbo is False:
+                #     tancik.turn(-2)
+                # if event.key == pygame.K_RIGHT and tancik.turbo is False:
+                #     tancik.turn(2)
                 if event.key == pygame.K_DOWN and tancik.turbo is False:
                     tancik.turn(0)
-                if event.key == pygame.K_x and tancik.turbo is False and tancik.charged is True:
+                if event.key == pygame.K_x and tancik.turbo is False and tancik.charged is True and tancik.speed != 0:
                     tancik.goTurbo()
                 if event.key == pygame.K_SPACE and tancik.loaded is True:
                     create_shoot(tancik, tancik_shoots)
+                if event.key == pygame.K_w and tancik.turbo is False:
+                    show_workshop(screen)
+
+        if tancik.turbo is False:
+            tancik.turn(0)
+        key_pressed = pygame.key.get_pressed()
+        if key_pressed[pygame.K_LEFT] and tancik.turbo is False:
+            tancik.turn(-2)
+        if key_pressed[pygame.K_RIGHT] and tancik.turbo is False:
+            tancik.turn(2)
 
         tancik.move()
         moove_shoots(tancik_shoots)
