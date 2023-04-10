@@ -1,7 +1,6 @@
 import pygame
 import cfg
 import sys
-from ground import GroundClass
 from tancik import TancikClass
 from shoot import ShootClass
 from info import InfoClass
@@ -38,95 +37,6 @@ def moove_enemy_shoots(enemy_shoots):
             enemy_shoots.remove(shoot)
 
 
-
-
-
-def show_score(screen, info, pos=(10, 10), pos2=(200, 10)):
-    font = pygame.font.Font(cfg.FONTPATH, 30)
-    score_text = font.render("Score: %s" % info.score, True, (0, 0, 0))
-    screen.blit(score_text, pos)
-    font = pygame.font.Font(cfg.FONTPATH, 30)
-    multiplier_text = font.render("X%s" % info.multiplier, True, (255, 0, 0))
-    screen.blit(multiplier_text, pos2)
-
-
-def paintTurbo(screen, tancik):
-    if tancik.charged is True:
-        img_path = cfg.ICON_PATHS['turbo']
-        location = [cfg.WIDTH - cfg.TILE_SIZE * 1, cfg.HEIGHT - cfg.TILE_SIZE]
-        turbo = GroundClass(img_path, location)
-        icons = pygame.sprite.Group()
-        icons.add(turbo)
-        icons.draw(screen)
-
-
-def paintShoot(screen, tancik):
-    if tancik.loaded is True:
-        img_path = cfg.ICON_PATHS['ishoot']
-        location = [cfg.WIDTH - cfg.TILE_SIZE * 2, cfg.HEIGHT - cfg.TILE_SIZE]
-        ishoot = GroundClass(img_path, location)
-        icons = pygame.sprite.Group()
-        icons.add(ishoot)
-        icons.draw(screen)
-
-
-def paintGrass(screen):
-    grounds = pygame.sprite.Group()
-
-    for i in range(cfg.WIDTH // cfg.TILE_SIZE):
-        location = [i * cfg.TILE_SIZE, 600]
-        img_path = cfg.LANDSCAPE_PATHS['grass1']
-        ground = GroundClass(img_path, location)
-        grounds.add(ground)
-    grounds.draw(screen)
-
-
-def showPlaygroundScreen(screen, tancik, tancik_shoots, info, enemy_shoots):
-    screen.fill(cfg.COLOR_SKY)
-    paintGrass(screen)
-    paintTurbo(screen, tancik)
-    paintShoot(screen, tancik)
-    tancik_shoots.draw(screen)
-    enemy_shoots.draw(screen)
-    info.enemies.draw(screen)
-    show_score(screen, info)
-    screen.blit(tancik.image, tancik.rect)
-    pygame.display.update()
-
-
-def ShowEndInterface(info, screen, screensize, win):
-    screen.fill((255, 255, 255))
-    message = u'Hanba! Znicil jsi drahy tank, prohral jsi!'
-    if win:
-        message = u'Gratulace! Nepratele jsou mrtvi, vyhral jsi!'
-    else:
-        info.decrease_score(100)
-    cfont = pygame.font.Font(cfg.FONTPATH, screensize[0] // 20)
-    score = cfont.render("Konecne score: %s" % info.score, True, (0, 0, 0))
-    srect = score.get_rect()
-    srect.midtop = (screensize[0] / 2, screensize[1] / 4)
-    screen.blit(score, srect)
-    content = cfont.render(message, True, (0, 200, 0))
-    crect = content.get_rect()
-    crect.midtop = (screensize[0] / 2, screensize[1] / 2)
-    screen.blit(content, crect)
-    content2 = cfont.render(u'Stisknutim klavesy Q to cele skoncis', True, (0, 200, 0))
-    crect2 = content2.get_rect()
-    crect2.midtop = (screensize[0] / 2, screensize[1] * 3 / 4)
-    screen.blit(content2, crect2)
-    pygame.display.update()
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_q:
-                pygame.quit()
-                sys.exit()
-            pygame.display.update()
-
-
 def update_ships(info, tancik_shoots, enemy_shots):
     info.add_enemy()
     for enemy in info.enemies:
@@ -141,16 +51,16 @@ def update_ships(info, tancik_shoots, enemy_shots):
     info.clean_enemies()
 
 
-def update_tank(info, enemy_shots, tancik, screen):
+def update_tank(info, enemy_shots, tancik, screen, screener):
     hitted = pygame.sprite.spritecollide(tancik, enemy_shots, False)
     if hitted:
-        ShowEndInterface(info, screen, cfg.SCREENSIZE, False)
+        screener.ShowEndInterface(info, screen, False)
 
 
-def update_level(info, screen):
+def update_level(info, screen, screener):
     if info.is_clean():
         if info.increase_level():
-            ShowEndInterface(info, screen, cfg.SCREENSIZE, True)
+            screener.ShowEndInterface(info, screen, True)
 
 
 
@@ -170,10 +80,10 @@ def main():
     # seznamy init
     tancik_shoots = pygame.sprite.Group()
     enemy_shoots = pygame.sprite.Group()
-    showPlaygroundScreen(screen, tancik, tancik_shoots, info, enemy_shoots)
 
     clock = pygame.time.Clock()
     while True:
+        screener.showPlaygroundScreen(screen, tancik, tancik_shoots, info, enemy_shoots)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -204,10 +114,10 @@ def main():
         moove_shoots(tancik_shoots)
         moove_enemy_shoots(enemy_shoots)
         update_ships(info, tancik_shoots, enemy_shoots)
-        update_level(info, screen) #Vrat jestli je konec hry
-        update_tank(info, enemy_shoots, tancik, screen)
+        update_level(info, screen, screener) #Vrat jestli je konec hry
+        update_tank(info, enemy_shoots, tancik, screen, screener)
 
-        showPlaygroundScreen(screen, tancik, tancik_shoots, info, enemy_shoots)
+
         clock.tick(cfg.FPS)
 
         game_time += 1
