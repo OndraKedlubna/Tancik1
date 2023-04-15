@@ -55,22 +55,21 @@ def update_tank(info, enemy_shots, tancik, screen, screener):
     hitted = pygame.sprite.spritecollide(tancik, enemy_shots, False)
     if hitted:
         screener.ShowEndInterface(info, screen, False)
+        ##restart game
+        return True
+    return False
 
 
 def update_level(info, screen, screener):
     if info.is_clean():
         if info.increase_level():
             screener.ShowEndInterface(info, screen, True)
+            ##restart game
+            return True
+    return False
 
-
-
-def main():
-    pygame.init()
-
+def init_game(screener):
     screen = pygame.display.set_mode(cfg.SCREENSIZE)
-    pygame.display.set_caption('Tancik')
-    # init screener
-    screener = ScreenerClass()
     # init Tancik
     tancik = TancikClass()
     difficulty = screener.showStartInterface(screen)
@@ -80,6 +79,16 @@ def main():
     # seznamy init
     tancik_shoots = pygame.sprite.Group()
     enemy_shoots = pygame.sprite.Group()
+    return screen, tancik, info, game_time, tancik_shoots, enemy_shoots
+
+
+
+def main():
+    pygame.init()
+    pygame.display.set_caption('Tancik')
+    # init screener
+    screener = ScreenerClass()
+    screen, tancik, info, game_time, tancik_shoots, enemy_shoots = init_game(screener)
 
     clock = pygame.time.Clock()
     while True:
@@ -114,8 +123,11 @@ def main():
         moove_shoots(tancik_shoots)
         moove_enemy_shoots(enemy_shoots)
         update_ships(info, tancik_shoots, enemy_shoots)
-        update_level(info, screen, screener) #Vrat jestli je konec hry
-        update_tank(info, enemy_shoots, tancik, screen, screener)
+        new_game = update_level(info, screen, screener)
+        new_game2 = update_tank(info, enemy_shoots, tancik, screen, screener)
+        #restart hry
+        if new_game or new_game2:
+            screen, tancik, info, game_time, tancik_shoots, enemy_shoots = init_game(screener)
 
 
         clock.tick(cfg.FPS)

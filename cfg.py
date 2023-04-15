@@ -1,6 +1,6 @@
 import os
 
-FPS = 40
+FPS = 60
 
 WIDTH = 1000
 HEIGHT = 650
@@ -12,11 +12,16 @@ COLOR_SKY = (133, 193, 233)
 PARAM_TURBO_CHARGE = 200
 PARAM_TURBO_FUEL = 60
 
-MAX_LEVEL = 1
+MAX_LEVEL = 2
 
 ENEMIES = {
     'eminion': {
         'speedx': 2,
+        'speedy': 4,
+        'reload': 20,
+    },
+    'eminion2': {
+        'speedx': 4,
         'speedy': 4,
         'reload': 20,
     }
@@ -24,12 +29,17 @@ ENEMIES = {
 
 LEVELS = {
     1: {
-        'eminion': 10,
+        'eminion': 1,
+        'eminion2': 1,
+    },
+    2: {
+        'eminion2': 5,
     }
 }
 
 ENEMIES_LIMIT = {
-    1: 1
+    1: 1,
+    2: 1
 }
 
 TANCIK_PATHS = {
@@ -56,7 +66,9 @@ SHOOT_PATHS = {
 
 ENEMIES_PATHS = {
     'eminion': os.path.join(os.getcwd(), 'resources/images/eminion.png'),
-    'eminionD': os.path.join(os.getcwd(), 'resources/images/eminionD.png')
+    'eminion2': os.path.join(os.getcwd(), 'resources/images/eminion2.png'),
+    'eminionD': os.path.join(os.getcwd(), 'resources/images/eminionD.png'),
+    'eminion2D': os.path.join(os.getcwd(), 'resources/images/eminionD.png')
 }
 
 FONTPATH = os.path.join(os.getcwd(), 'resources/font/FZSTK.TTF')

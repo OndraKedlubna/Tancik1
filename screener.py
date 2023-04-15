@@ -82,19 +82,24 @@ class ScreenerClass:
         cfont = pygame.font.Font(cfg.FONTPATH, screensize[0] // 20)
         score = cfont.render("Konecne score: %s" % info.score, True, (0, 0, 0))
         srect = score.get_rect()
-        srect.midtop = (screensize[0] / 2, screensize[1] / 4)
+        srect.midtop = (screensize[0] / 2, screensize[1] / 5)
         screen.blit(score, srect)
         content = cfont.render(message, True, (0, 200, 0))
         crect = content.get_rect()
-        crect.midtop = (screensize[0] / 2, screensize[1] / 2)
+        crect.midtop = (screensize[0] / 2, screensize[1] *2 / 5)
         screen.blit(content, crect)
         content2 = cfont.render(u'Stisknutim klavesy Q to cele skoncis', True, (0, 200, 0))
         crect2 = content2.get_rect()
-        crect2.midtop = (screensize[0] / 2, screensize[1] * 3 / 4)
+        crect2.midtop = (screensize[0] / 2, screensize[1] * 3 / 5)
         screen.blit(content2, crect2)
+        content3 = cfont.render(u'Stisknutim klavesy R to zkusis znova', True, (0, 200, 0))
+        crect3 = content3.get_rect()
+        crect3.midtop = (screensize[0] / 2, screensize[1] * 4 / 5)
+        screen.blit(content3, crect3)
         pygame.display.update()
 
-        while True:
+        waiting = True
+        while waiting:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -102,6 +107,8 @@ class ScreenerClass:
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                     pygame.quit()
                     sys.exit()
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                    waiting = False
                 pygame.display.update()
 
     def showPlaygroundScreen(self, screen, tancik, tancik_shoots, info, enemy_shoots):

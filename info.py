@@ -40,6 +40,8 @@ class InfoClass():
             print(str(self.enemies_names))
             if enemy_name == 'eminion':
                 self.enemies.add(EShipClass('eminion', (random.randint(0, 850), 300), 0))
+            if enemy_name == 'eminion2':
+                self.enemies.add(EShipClass('eminion2', (random.randint(0, 850), 300), 0))
 
     def clean_enemies(self):
         for enemy in self.enemies:
