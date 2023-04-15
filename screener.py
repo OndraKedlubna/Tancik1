@@ -66,9 +66,9 @@ class ScreenerClass:
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
-                    return 1
+                    return 0
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_g:
-                    return 2
+                    return 1
                 pygame.display.update()
 
     def ShowEndInterface(self, info, screen, win):
