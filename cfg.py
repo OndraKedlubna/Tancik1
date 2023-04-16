@@ -63,6 +63,18 @@ ENEMIES_LIMIT = {
     3: 3
 }
 
+UPGRADES = {
+    'speed': {
+        1: {
+            'value': 2,
+            'cost': 50
+        },
+        2: 3,
+        3: 4,
+        'cap': 3
+    }
+}
+
 TANCIK_PATHS = {
     'tank': os.path.join(os.getcwd(), 'resources/images/tank.png'),
     'tankl': os.path.join(os.getcwd(), 'resources/images/tankl.png'),

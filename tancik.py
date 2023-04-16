@@ -1,5 +1,6 @@
 import pygame
 import cfg
+from upgrades import UpgradesClass
 
 
 class TancikClass(pygame.sprite.Sprite):
@@ -18,10 +19,20 @@ class TancikClass(pygame.sprite.Sprite):
         self.charged = True
         self.loaded = True
         self.reload = 0
+        self.upgrades = UpgradesClass()
         print('init tancik')
 
-    def turn(self, num):
+    def __turn(self, num):
         self.speed = num
+
+    def stop(self):
+        self.__turn(0)
+
+    def go_left(self):
+        self.__turn(self.upgrades.get_speed() * -1)
+
+    def go_right(self):
+        self.__turn(self.upgrades.get_speed())
 
     def goTurbo(self):
         self.turbo = True

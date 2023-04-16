@@ -9,6 +9,7 @@ class InfoClass():
     def __init__(self, difficulty):
         self.level = 0
         self.score = 400
+        self.money = 0
         self.multiplier = 1
         self.multiplier_time = 0
         self.difficulty = difficulty
@@ -56,6 +57,7 @@ class InfoClass():
 
     def increase_score(self, amount, multiplier):
         self.score = self.score + amount * self.multiplier
+        self.money = self.money + amount * self.multiplier
         self.increase_multiplier(multiplier)
         self.multiplier_time = 0
 

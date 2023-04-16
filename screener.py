@@ -9,13 +9,14 @@ class ScreenerClass:
     def __init__(self):
         pass
 
-    def show_workshop(self, screen):
+    def show_workshop(self, tancik, screen, info):
         workshop = True
         screen.fill((255, 255, 255))
+        self.__show_score(screen, info)
 
         mfont = pygame.font.Font(cfg.FONTPATH, cfg.TILE_SIZE)
         sfont = pygame.font.Font(cfg.FONTPATH, cfg.TILE_SIZE // 2)
-        minfo = mfont.render("Dilna", True, (0, 128, 0))
+        minfo = mfont.render("Dilna(navrat do hry stiskem w)", True, (0, 128, 0))
         minfo2 = sfont.render("Zde muzou totalne nasazeni mechanici vylepsit tvuj tank", True, (0, 128, 0))
 
         ## tohle dej do metody
@@ -26,6 +27,12 @@ class ScreenerClass:
         crect = minfo2.get_rect()
         crect.midtop = (cfg.SCREENSIZE[0] / 2, cfg.TILE_SIZE * 2)
         screen.blit(minfo2, crect)
+
+        cur_speed = tancik.upgrades.speed
+        multiplier_text = mfont.render("[A]Motor: %s z %d, cena %d," % (cur_speed, cfg.UPGRADES.get('speed').get('cap'), cfg.UPGRADES.get('speed').get(cur_speed).get('cost')), True, (153, 102, 0))
+        crect = multiplier_text.get_rect()
+        crect.midtop = (cfg.SCREENSIZE[0] / 2, cfg.TILE_SIZE * 3)
+        screen.blit(multiplier_text, crect)
 
         while workshop:
             for event in pygame.event.get():
@@ -113,25 +120,29 @@ class ScreenerClass:
 
     def showPlaygroundScreen(self, screen, tancik, tancik_shoots, info, enemy_shoots):
         screen.fill(cfg.COLOR_SKY)
-        self.paintGrass(screen)
-        self.paintTurbo(screen, tancik)
-        self.paintShoot(screen, tancik)
+        self.__paintGrass(screen)
+        self.__paintTurbo(screen, tancik)
+        self.__paintShoot(screen, tancik)
         tancik_shoots.draw(screen)
         enemy_shoots.draw(screen)
         info.enemies.draw(screen)
-        self.show_score(screen, info)
+        self.__show_score(screen, info)
+        #dame to do zvlastni metody v tanku, tam se budou vykreslovat vsechny obrazky
         screen.blit(tancik.image, tancik.rect)
         pygame.display.update()
 
-    def show_score(self, screen, info, pos=(10, 10), pos2=(200, 10)):
+    def __show_score(self, screen, info, pos=(10, 10), pos2=(250, 10)):
         font = pygame.font.Font(cfg.FONTPATH, 30)
         score_text = font.render("Score: %s" % info.score, True, (0, 0, 0))
         screen.blit(score_text, pos)
         font = pygame.font.Font(cfg.FONTPATH, 30)
         multiplier_text = font.render("X%s" % info.multiplier, True, (255, 0, 0))
         screen.blit(multiplier_text, pos2)
+        money_text = font.render("Valecny fond: %s" % info.money, True, (204, 154, 51))
+        pos3 = (pos2[0] + 50, 10)
+        screen.blit(money_text, pos3)
 
-    def paintTurbo(self, screen, tancik):
+    def __paintTurbo(self, screen, tancik):
         if tancik.charged is True:
             img_path = cfg.ICON_PATHS['turbo']
             location = [cfg.WIDTH - cfg.TILE_SIZE * 1, cfg.HEIGHT - cfg.TILE_SIZE]
@@ -140,7 +151,7 @@ class ScreenerClass:
             icons.add(turbo)
             icons.draw(screen)
 
-    def paintShoot(self, screen, tancik):
+    def __paintShoot(self, screen, tancik):
         if tancik.loaded is True:
             img_path = cfg.ICON_PATHS['ishoot']
             location = [cfg.WIDTH - cfg.TILE_SIZE * 2, cfg.HEIGHT - cfg.TILE_SIZE]
@@ -149,7 +160,7 @@ class ScreenerClass:
             icons.add(ishoot)
             icons.draw(screen)
 
-    def paintGrass(self, screen):
+    def __paintGrass(self, screen):
         grounds = pygame.sprite.Group()
 
         for i in range(cfg.WIDTH // cfg.TILE_SIZE):

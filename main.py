@@ -103,21 +103,21 @@ def main():
                 # if event.key == pygame.K_RIGHT and tancik.turbo is False:
                 #     tancik.turn(2)
                 if event.key == pygame.K_DOWN and tancik.turbo is False:
-                    tancik.turn(0)
+                    tancik.stop()
                 if event.key == pygame.K_x and tancik.turbo is False and tancik.charged is True and tancik.speed != 0:
                     tancik.goTurbo()
                 if event.key == pygame.K_SPACE and tancik.loaded is True:
                     create_shoot(tancik, tancik_shoots)
                 if event.key == pygame.K_w and tancik.turbo is False:
-                    screener.show_workshop(screen)
+                    screener.show_workshop(tancik, screen, info)
 
         if tancik.turbo is False:
-            tancik.turn(0)
+            tancik.stop()
         key_pressed = pygame.key.get_pressed()
         if key_pressed[pygame.K_LEFT] and tancik.turbo is False:
-            tancik.turn(-2)
+            tancik.go_left()
         if key_pressed[pygame.K_RIGHT] and tancik.turbo is False:
-            tancik.turn(2)
+            tancik.go_right()
 
         tancik.move()
         moove_shoots(tancik_shoots)
