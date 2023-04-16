@@ -28,7 +28,7 @@ class InfoClass():
         for enemy in level_map.keys():
             for n in range(level_map.get(enemy)):
                 self.enemies_names.append(enemy)
-        self.enemies_limit = cfg.ENEMIES_LIMIT.get(self.level) * self.difficulty
+        self.enemies_limit = cfg.ENEMIES_LIMIT.get(self.level) + self.difficulty
         return False
 
     def add_enemy(self):
@@ -39,7 +39,11 @@ class InfoClass():
             self.enemies_names.remove(enemy_name)
             print(str(self.enemies_names))
             if enemy_name == 'eminion':
-                self.enemies.add(EShipClass('eminion', (random.randint(0, 850), 300), 0))
+                self.enemies.add(EShipClass('eminion', (random.randint(0, 850), 300)))
+            if enemy_name == 'eminion2':
+                self.enemies.add(EShipClass('eminion2', (random.randint(0, 850), 300)))
+            if enemy_name == 'eminion3':
+                self.enemies.add(EShipClass('eminion3', (random.randint(0, 850), 300)))
 
     def clean_enemies(self):
         for enemy in self.enemies:

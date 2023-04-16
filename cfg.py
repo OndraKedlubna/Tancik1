@@ -1,6 +1,6 @@
 import os
 
-FPS = 40
+FPS = 60
 
 WIDTH = 1000
 HEIGHT = 650
@@ -12,24 +12,55 @@ COLOR_SKY = (133, 193, 233)
 PARAM_TURBO_CHARGE = 200
 PARAM_TURBO_FUEL = 60
 
-MAX_LEVEL = 1
+MAX_LEVEL = 3
 
 ENEMIES = {
     'eminion': {
         'speedx': 2,
         'speedy': 4,
         'reload': 20,
+        'score': 25,
+        'shootspeed': 3
+    },
+    'eminion2': {
+        'speedx': 4,
+        'speedy': 4,
+        'reload': 20,
+        'score': 50,
+        'shootspeed': 6
+    },
+    'eminion3': {
+        'speedx': 2,
+        'speedy': 4,
+        'reload': 0,
+        'score': 50,
+        'shootspeed': 5
     }
 }
 
 LEVELS = {
     1: {
         'eminion': 10,
+        'eminion2': 1,
+
+    },
+    2: {
+        'eminion': 10,
+        'eminion2': 5,
+        'eminion3': 5,
+    },
+    3: {
+        'eminion': 5,
+        'eminion2': 10,
+        'eminion3': 5,
     }
+
 }
 
 ENEMIES_LIMIT = {
-    1: 1
+    1: 1,
+    2: 2,
+    3: 3
 }
 
 TANCIK_PATHS = {
@@ -56,7 +87,11 @@ SHOOT_PATHS = {
 
 ENEMIES_PATHS = {
     'eminion': os.path.join(os.getcwd(), 'resources/images/eminion.png'),
-    'eminionD': os.path.join(os.getcwd(), 'resources/images/eminionD.png')
+    'eminion2': os.path.join(os.getcwd(), 'resources/images/eminion2.png'),
+    'eminion3': os.path.join(os.getcwd(), 'resources/images/eminion3.png'),
+    'eminionD': os.path.join(os.getcwd(), 'resources/images/eminionD.png'),
+    'eminion2D': os.path.join(os.getcwd(), 'resources/images/eminionD.png'),
+    'eminion3D': os.path.join(os.getcwd(), 'resources/images/eminionD.png')
 }
 
 FONTPATH = os.path.join(os.getcwd(), 'resources/font/FZSTK.TTF')
