@@ -12,7 +12,6 @@ class ScreenerClass:
     def show_workshop(self, tancik, screen, info):
         workshop = True
         screen.fill((255, 255, 255))
-        self.__show_score(screen, info)
 
         mfont = pygame.font.Font(cfg.FONTPATH, cfg.TILE_SIZE)
         sfont = pygame.font.Font(cfg.FONTPATH, cfg.TILE_SIZE // 2)
@@ -28,16 +27,27 @@ class ScreenerClass:
         crect.midtop = (cfg.SCREENSIZE[0] / 2, cfg.TILE_SIZE * 2)
         screen.blit(minfo2, crect)
 
-        cur_speed = tancik.upgrades.speed
-        multiplier_text = mfont.render("[A]Motor: %s z %d, cena %d," % (cur_speed, cfg.UPGRADES.get('speed').get('cap'), cfg.UPGRADES.get('speed').get(cur_speed).get('cost')), True, (153, 102, 0))
-        crect = multiplier_text.get_rect()
-        crect.midtop = (cfg.SCREENSIZE[0] / 2, cfg.TILE_SIZE * 3)
-        screen.blit(multiplier_text, crect)
 
         while workshop:
+            screen.fill((255, 255, 255), (0, 0, screen.get_width(), cfg.TILE_SIZE))
+            self.__show_score(screen, info)
+            screen.fill((255, 255, 255), (0, cfg.TILE_SIZE * 3, screen.get_width(), screen.get_height()))
+            cur_speed = tancik.upgrades.speed
+            cur_speed_cost = cfg.UPGRADES.get('speed').get(cur_speed).get('cost')
+            multiplier_text = mfont.render(
+                "[A]Motor: %s z %d, cena %d" % (cur_speed, cfg.UPGRADES.get('speed').get('cap'),
+                                                cur_speed_cost), True, (153, 102, 0))
+            crect = multiplier_text.get_rect()
+            crect.midtop = (cfg.SCREENSIZE[0] / 2, cfg.TILE_SIZE * 3)
+            screen.blit(multiplier_text, crect)
+
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_w:
                     workshop = False
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_a:
+                    if info.money >= cur_speed_cost:
+                        if tancik.upgrades.upgrade_speed():
+                            info.decrease_money(cur_speed_cost)
                 pygame.display.update()
 
     def showStartInterface(self, screen):

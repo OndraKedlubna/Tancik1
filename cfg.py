@@ -67,11 +67,21 @@ UPGRADES = {
     'speed': {
         1: {
             'value': 2,
-            'cost': 50
+            'cost': 1000
         },
-        2: 3,
-        3: 4,
-        'cap': 3
+        2: {
+            'value': 3,
+            'cost': 2000
+        },
+        3: {
+            'value': 4,
+            'cost': 4000
+        },
+        4: {
+            'value': 5,
+            'cost': 0
+        },
+        'cap': 4
     }
 }
 

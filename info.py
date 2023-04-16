@@ -55,9 +55,12 @@ class InfoClass():
     def decrease_score(self, amount):
         self.score = self.score - amount
 
+    def decrease_money(self, amount):
+        self.money = self.money - amount
+
     def increase_score(self, amount, multiplier):
         self.score = self.score + amount * self.multiplier
-        self.money = self.money + amount * self.multiplier
+        self.money = self.money + amount * max(min(3, self.multiplier // 3), 1)
         self.increase_multiplier(multiplier)
         self.multiplier_time = 0
 
