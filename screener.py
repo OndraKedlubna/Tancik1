@@ -48,6 +48,7 @@ class ScreenerClass:
                     if info.money >= cur_speed_cost:
                         if tancik.upgrades.upgrade_speed():
                             info.decrease_money(cur_speed_cost)
+                            tancik.set_upgrades_images()
                 pygame.display.update()
 
     def showStartInterface(self, screen):
@@ -138,7 +139,7 @@ class ScreenerClass:
         info.enemies.draw(screen)
         self.__show_score(screen, info)
         #dame to do zvlastni metody v tanku, tam se budou vykreslovat vsechny obrazky
-        screen.blit(tancik.image, tancik.rect)
+        tancik.paint_tank(screen)
         pygame.display.update()
 
     def __show_score(self, screen, info, pos=(10, 10), pos2=(250, 10)):
