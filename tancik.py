@@ -9,10 +9,12 @@ class TancikClass(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.img_path = cfg.TANCIK_PATHS['tank']
         self.image = pygame.image.load(self.img_path)
+        self.imagemove = pygame.image.load(cfg.TANCIK_PATHS['tankl'])
         self.location = (600, 550)
         self.rect = self.image.get_rect()
         self.rect.topleft = self.location
         self.speed = 0
+        self.moving = False
         self.turbo = False
         self.turbo_fuel = 0
         self.turbo_charging = 0
@@ -20,6 +22,7 @@ class TancikClass(pygame.sprite.Sprite):
         self.loaded = True
         self.reload = 0
         self.upgrades = UpgradesClass()
+        self.podimage = pygame.image.load(self.upgrades.speedImagePath)
         print('init tancik')
 
     def __turn(self, num):
@@ -45,6 +48,9 @@ class TancikClass(pygame.sprite.Sprite):
         self.loaded = False
         return [self.rect.midtop[0], self.rect.midtop[1] + size]
 
+    def set_upgrades_images(self):
+        self.podimage = pygame.image.load(self.upgrades.speedImagePath)
+
     def move(self):
         # nabijeni
         self.__reloading()
@@ -56,6 +62,12 @@ class TancikClass(pygame.sprite.Sprite):
         self.__do_step()
         # prirazeni ikonky
         self.__icon()
+
+    def paint_tank(self, screen):
+        screen.blit(self.image, self.rect)
+        screen.blit(self.podimage, self.rect)
+        if self.moving:
+            screen.blit(self.imagemove, self.rect)
 
     def __reloading(self):
         if self.reload > 0:
@@ -84,13 +96,16 @@ class TancikClass(pygame.sprite.Sprite):
 
     def __icon(self):
         if self.speed < 0:
-            self.img_path = cfg.TANCIK_PATHS['tankl']
+            impath = cfg.TANCIK_PATHS['tankl']
+            self.moving = True
             if self.turbo:
-                self.img_path = cfg.TANCIK_PATHS['tanklt']
+                impath = cfg.TANCIK_PATHS['tanklt']
         if self.speed > 0:
-            self.img_path = cfg.TANCIK_PATHS['tankr']
+            impath = cfg.TANCIK_PATHS['tankr']
+            self.moving = True
             if self.turbo:
-                self.img_path = cfg.TANCIK_PATHS['tankrt']
+                impath = cfg.TANCIK_PATHS['tankrt']
         if self.speed == 0:
-            self.img_path = cfg.TANCIK_PATHS['tank']
-        self.image = pygame.image.load(self.img_path)
+            self.moving = False
+        if self.moving == True:
+            self.imagemove = pygame.image.load(impath)
