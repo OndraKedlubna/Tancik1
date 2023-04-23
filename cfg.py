@@ -86,6 +86,29 @@ UPGRADES = {
             'image': 'tpod4'
         },
         'cap': 4
+    },
+    'reload': {
+        1: {
+            'value': 90,
+            'cost': 500,
+            'image': 'tcan1'
+        },
+        2: {
+            'value': 60,
+            'cost': 1000,
+            'image': 'tcan2'
+        },
+        3: {
+            'value': 30,
+            'cost': 1500,
+            'image': 'tcan3'
+        },
+        4: {
+            'value': 15,
+            'cost': 0,
+            'image': 'tcan4'
+        },
+        'cap': 4
     }
 }
 
@@ -98,7 +121,11 @@ TANCIK_PATHS = {
     'tpod1': os.path.join(os.getcwd(), 'resources/images/tpod1.png'),
     'tpod2': os.path.join(os.getcwd(), 'resources/images/tpod2.png'),
     'tpod3': os.path.join(os.getcwd(), 'resources/images/tpod3.png'),
-    'tpod4': os.path.join(os.getcwd(), 'resources/images/tpod4.png')
+    'tpod4': os.path.join(os.getcwd(), 'resources/images/tpod4.png'),
+    'tcan1': os.path.join(os.getcwd(), 'resources/images/tcan1.png'),
+    'tcan2': os.path.join(os.getcwd(), 'resources/images/tcan2.png'),
+    'tcan3': os.path.join(os.getcwd(), 'resources/images/tcan3.png'),
+    'tcan4': os.path.join(os.getcwd(), 'resources/images/tcan4.png')
 }
 
 LANDSCAPE_PATHS = {
