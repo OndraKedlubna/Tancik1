@@ -25,6 +25,7 @@ class TancikClass(pygame.sprite.Sprite):
         self.upgrades = UpgradesClass()
         self.podimage = pygame.image.load(self.upgrades.speedImagePath)
         self.reloadimage = pygame.image.load(self.upgrades.reloadImagePath)
+        self.powerimage = pygame.image.load(self.upgrades.powerImagePath)
         self.shoots = pygame.sprite.Group()
         print('init tancik')
 
@@ -49,7 +50,7 @@ class TancikClass(pygame.sprite.Sprite):
     def shoot_from_gun(self):
         location = self.__get_shoot_midbottom(9)
         img_path = cfg.SHOOT_PATHS['tshoot']
-        shoot = ShootClass(img_path, location, 5)
+        shoot = ShootClass(img_path, location, self.upgrades.get_power())
         self.shoots.add(shoot)
 
     def __get_shoot_midbottom(self, size):
@@ -60,6 +61,7 @@ class TancikClass(pygame.sprite.Sprite):
     def set_upgrades_images(self):
         self.podimage = pygame.image.load(self.upgrades.speedImagePath)
         self.reloadimage = pygame.image.load(self.upgrades.reloadImagePath)
+        self.powerimage = pygame.image.load(self.upgrades.powerImagePath)
 
     def move(self):
         # nabijeni
@@ -80,6 +82,7 @@ class TancikClass(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect)
         screen.blit(self.podimage, self.rect)
         screen.blit(self.reloadimage, self.rect)
+        screen.blit(self.powerimage, self.rect)
         if self.moving:
             screen.blit(self.imagemove, self.rect)
 
