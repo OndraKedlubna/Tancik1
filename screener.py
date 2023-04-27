@@ -36,6 +36,8 @@ class ScreenerClass:
             cur_speed_cost = cfg.UPGRADES.get('speed').get(cur_speed).get('cost')
             cur_reload = tancik.upgrades.reload
             cur_reload_cost = cfg.UPGRADES.get('reload').get(cur_reload).get('cost')
+            cur_power = tancik.upgrades.power
+            cur_power_cost = cfg.UPGRADES.get('power').get(cur_power).get('cost')
 
             multiplier_text = mfont.render(
                 "[A]Motor: %s z %d, cena %d" % (cur_speed, cfg.UPGRADES.get('speed').get('cap'),
@@ -51,6 +53,13 @@ class ScreenerClass:
             crect.midtop = (cfg.SCREENSIZE[0] / 2, cfg.TILE_SIZE * 4)
             screen.blit(reload_text, crect)
 
+            power_text = mfont.render(
+                "[D]Kanon: %s z %d, cena %d" % (cur_power, cfg.UPGRADES.get('power').get('cap'),
+                                                   cur_power_cost), True, (153, 102, 0))
+            crect = power_text.get_rect()
+            crect.midtop = (cfg.SCREENSIZE[0] / 2, cfg.TILE_SIZE * 5)
+            screen.blit(power_text, crect)
+
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_w:
                     workshop = False
@@ -63,6 +72,11 @@ class ScreenerClass:
                     if info.money >= cur_reload_cost:
                         if tancik.upgrades.upgrade_reload():
                             info.decrease_money(cur_reload_cost)
+                            tancik.set_upgrades_images()
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_d:
+                    if info.money >= cur_power_cost:
+                        if tancik.upgrades.upgrade_power():
+                            info.decrease_money(cur_power_cost)
                             tancik.set_upgrades_images()
                 pygame.display.update()
 

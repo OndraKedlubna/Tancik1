@@ -1,6 +1,6 @@
 import os
 
-FPS = 60
+FPS = 80
 
 WIDTH = 1000
 HEIGHT = 650
