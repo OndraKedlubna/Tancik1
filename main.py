@@ -117,10 +117,10 @@ def main():
 
         game_time += 1
         info.multiplier_time = info.multiplier_time + 1
-        if info.multiplier_time % 150 == 0:
+        if info.multiplier_time % 200 == 0:
             info.decrease_multiplier(1)
 
-        if game_time % 40 == 0:
+        if game_time % 100 == 0:
             info.decrease_score(2)
             print(str(info.enemies))
             print(str(info.enemies_names))

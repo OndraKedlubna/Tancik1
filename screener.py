@@ -32,12 +32,13 @@ class ScreenerClass:
             screen.fill((255, 255, 255), (0, 0, screen.get_width(), cfg.TILE_SIZE))
             self.__show_score(screen, info)
             screen.fill((255, 255, 255), (0, cfg.TILE_SIZE * 3, screen.get_width(), screen.get_height()))
+            cheat = 1
             cur_speed = tancik.upgrades.speed
-            cur_speed_cost = cfg.UPGRADES.get('speed').get(cur_speed).get('cost')
+            cur_speed_cost = cfg.UPGRADES.get('speed').get(cur_speed).get('cost') // cheat
             cur_reload = tancik.upgrades.reload
-            cur_reload_cost = cfg.UPGRADES.get('reload').get(cur_reload).get('cost')
+            cur_reload_cost = cfg.UPGRADES.get('reload').get(cur_reload).get('cost') // cheat
             cur_power = tancik.upgrades.power
-            cur_power_cost = cfg.UPGRADES.get('power').get(cur_power).get('cost')
+            cur_power_cost = cfg.UPGRADES.get('power').get(cur_power).get('cost') // cheat
 
             multiplier_text = mfont.render(
                 "[A]Motor: %s z %d, cena %d" % (cur_speed, cfg.UPGRADES.get('speed').get('cap'),

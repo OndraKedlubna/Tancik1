@@ -89,22 +89,22 @@ UPGRADES = {
     },
     'reload': {
         1: {
-            'value': 90,
+            'value': 120,
             'cost': 500,
             'image': 'tcan1'
         },
         2: {
-            'value': 60,
+            'value': 80,
             'cost': 1000,
             'image': 'tcan2'
         },
         3: {
-            'value': 30,
+            'value': 40,
             'cost': 1500,
             'image': 'tcan3'
         },
         4: {
-            'value': 15,
+            'value': 20,
             'cost': 0,
             'image': 'tcan4'
         },
