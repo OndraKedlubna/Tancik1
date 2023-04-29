@@ -10,24 +10,10 @@ from screener import ScreenerClass
 # penize
 
 
-def create_shoot(tancik, tancik_shoots):
-    location = tancik.get_shoot_midbottom(9)
-    img_path = cfg.SHOOT_PATHS['tshoot']
-    shoot = ShootClass(img_path, location, 5)
-    tancik_shoots.add(shoot)
-
-
 def create_enemy_shoot(enemy, enemy_shoots):
     shoot = enemy.process_shoot()
     if shoot is not None:
         enemy_shoots.add(shoot)
-
-
-def moove_shoots(tancik_shoots):
-    for shoot in tancik_shoots:
-        shoot.move()
-        if shoot.is_too_high():
-            tancik_shoots.remove(shoot)
 
 
 def moove_enemy_shoots(enemy_shoots):
@@ -37,17 +23,17 @@ def moove_enemy_shoots(enemy_shoots):
             enemy_shoots.remove(shoot)
 
 
-def update_ships(info, tancik_shoots, enemy_shots):
+def update_ships(info, tancik, enemy_shots):
     info.add_enemy()
     for enemy in info.enemies:
         enemy.move()
         create_enemy_shoot(enemy, enemy_shots)
-    hitted_enemies = pygame.sprite.groupcollide(info.enemies, tancik_shoots, False, False)
+    hitted_enemies = pygame.sprite.groupcollide(info.enemies, tancik.shoots, False, False)
     if len(hitted_enemies) > 0:
         for enemy, shoots in hitted_enemies.items():
             enemy.die(info)
             for shoot in shoots:
-                tancik_shoots.remove(shoot)
+                tancik.shoots.remove(shoot)
     info.clean_enemies()
 
 
@@ -77,9 +63,8 @@ def init_game(screener):
     info = InfoClass(difficulty)
     game_time = 0
     # seznamy init
-    tancik_shoots = pygame.sprite.Group()
     enemy_shoots = pygame.sprite.Group()
-    return screen, tancik, info, game_time, tancik_shoots, enemy_shoots
+    return screen, tancik, info, game_time, enemy_shoots
 
 
 
@@ -88,11 +73,10 @@ def main():
     pygame.display.set_caption('Tancik')
     # init screener
     screener = ScreenerClass()
-    screen, tancik, info, game_time, tancik_shoots, enemy_shoots = init_game(screener)
-
+    screen, tancik, info, game_time, enemy_shoots = init_game(screener)
     clock = pygame.time.Clock()
     while True:
-        screener.showPlaygroundScreen(screen, tancik, tancik_shoots, info, enemy_shoots)
+        screener.showPlaygroundScreen(screen, tancik, info, enemy_shoots)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -107,7 +91,7 @@ def main():
                 if event.key == pygame.K_x and tancik.turbo is False and tancik.charged is True and tancik.speed != 0:
                     tancik.goTurbo()
                 if event.key == pygame.K_SPACE and tancik.loaded is True:
-                    create_shoot(tancik, tancik_shoots)
+                    tancik.shoot_from_gun()
                 if event.key == pygame.K_w and tancik.turbo is False:
                     screener.show_workshop(tancik, screen, info)
 
@@ -120,24 +104,23 @@ def main():
             tancik.go_right()
 
         tancik.move()
-        moove_shoots(tancik_shoots)
         moove_enemy_shoots(enemy_shoots)
-        update_ships(info, tancik_shoots, enemy_shoots)
+        update_ships(info, tancik, enemy_shoots)
         new_game = update_level(info, screen, screener)
         new_game2 = update_tank(info, enemy_shoots, tancik, screen, screener)
         #restart hry
         if new_game or new_game2:
-            screen, tancik, info, game_time, tancik_shoots, enemy_shoots = init_game(screener)
+            screen, tancik, info, game_time, enemy_shoots = init_game(screener)
 
 
         clock.tick(cfg.FPS)
 
         game_time += 1
         info.multiplier_time = info.multiplier_time + 1
-        if info.multiplier_time % 150 == 0:
+        if info.multiplier_time % 200 == 0:
             info.decrease_multiplier(1)
 
-        if game_time % 40 == 0:
+        if game_time % 100 == 0:
             info.decrease_score(2)
             print(str(info.enemies))
             print(str(info.enemies_names))

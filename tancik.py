@@ -1,6 +1,7 @@
 import pygame
 import cfg
 from upgrades import UpgradesClass
+from shoot import ShootClass
 
 
 class TancikClass(pygame.sprite.Sprite):
@@ -23,6 +24,9 @@ class TancikClass(pygame.sprite.Sprite):
         self.reload = 0
         self.upgrades = UpgradesClass()
         self.podimage = pygame.image.load(self.upgrades.speedImagePath)
+        self.reloadimage = pygame.image.load(self.upgrades.reloadImagePath)
+        self.powerimage = pygame.image.load(self.upgrades.powerImagePath)
+        self.shoots = pygame.sprite.Group()
         print('init tancik')
 
     def __turn(self, num):
@@ -43,13 +47,21 @@ class TancikClass(pygame.sprite.Sprite):
         self.speed = self.speed * 2
         self.turbo_fuel = cfg.PARAM_TURBO_FUEL
 
-    def get_shoot_midbottom(self, size):
-        self.reload = 40
+    def shoot_from_gun(self):
+        location = self.__get_shoot_midbottom(9)
+        img_path = cfg.SHOOT_PATHS['tshoot']
+        shoot = ShootClass(img_path, location, self.upgrades.get_power())
+        self.shoots.add(shoot)
+
+    def __get_shoot_midbottom(self, size):
+        self.reload = self.upgrades.get_reload()
         self.loaded = False
         return [self.rect.midtop[0], self.rect.midtop[1] + size]
 
     def set_upgrades_images(self):
         self.podimage = pygame.image.load(self.upgrades.speedImagePath)
+        self.reloadimage = pygame.image.load(self.upgrades.reloadImagePath)
+        self.powerimage = pygame.image.load(self.upgrades.powerImagePath)
 
     def move(self):
         # nabijeni
@@ -62,10 +74,15 @@ class TancikClass(pygame.sprite.Sprite):
         self.__do_step()
         # prirazeni ikonky
         self.__icon()
+        #pohyb strel
+        self.__move_shoots()
 
     def paint_tank(self, screen):
+        self.shoots.draw(screen)
         screen.blit(self.image, self.rect)
         screen.blit(self.podimage, self.rect)
+        screen.blit(self.reloadimage, self.rect)
+        screen.blit(self.powerimage, self.rect)
         if self.moving:
             screen.blit(self.imagemove, self.rect)
 
@@ -93,6 +110,12 @@ class TancikClass(pygame.sprite.Sprite):
         self.rect.left += self.speed
         self.rect.left = max(0, self.rect.left)
         self.rect.left = min(cfg.WIDTH - cfg.TILE_SIZE, self.rect.left)
+
+    def __move_shoots(self):
+        for shoot in self.shoots:
+            shoot.move()
+            if shoot.is_too_high():
+                self.shoots.remove(shoot)
 
     def __icon(self):
         if self.speed < 0:

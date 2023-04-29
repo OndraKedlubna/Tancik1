@@ -1,6 +1,6 @@
 import os
 
-FPS = 60
+FPS = 80
 
 WIDTH = 1000
 HEIGHT = 650
@@ -86,6 +86,52 @@ UPGRADES = {
             'image': 'tpod4'
         },
         'cap': 4
+    },
+    'reload': {
+        1: {
+            'value': 120,
+            'cost': 500,
+            'image': 'tcan1'
+        },
+        2: {
+            'value': 80,
+            'cost': 1000,
+            'image': 'tcan2'
+        },
+        3: {
+            'value': 40,
+            'cost': 1500,
+            'image': 'tcan3'
+        },
+        4: {
+            'value': 20,
+            'cost': 0,
+            'image': 'tcan4'
+        },
+        'cap': 4
+    },
+    'power': {
+        1: {
+            'value': 4,
+            'cost': 1000,
+            'image': 'tstrel1'
+        },
+        2: {
+            'value': 6,
+            'cost': 2000,
+            'image': 'tstrel2'
+        },
+        3: {
+            'value': 9,
+            'cost': 4000,
+            'image': 'tstrel3'
+        },
+        4: {
+            'value': 14,
+            'cost': 0,
+            'image': 'tstrel4'
+        },
+        'cap': 4
     }
 }
 
@@ -98,7 +144,15 @@ TANCIK_PATHS = {
     'tpod1': os.path.join(os.getcwd(), 'resources/images/tpod1.png'),
     'tpod2': os.path.join(os.getcwd(), 'resources/images/tpod2.png'),
     'tpod3': os.path.join(os.getcwd(), 'resources/images/tpod3.png'),
-    'tpod4': os.path.join(os.getcwd(), 'resources/images/tpod4.png')
+    'tpod4': os.path.join(os.getcwd(), 'resources/images/tpod4.png'),
+    'tcan1': os.path.join(os.getcwd(), 'resources/images/tcan1.png'),
+    'tcan2': os.path.join(os.getcwd(), 'resources/images/tcan2.png'),
+    'tcan3': os.path.join(os.getcwd(), 'resources/images/tcan3.png'),
+    'tcan4': os.path.join(os.getcwd(), 'resources/images/tcan4.png'),
+    'tstrel1': os.path.join(os.getcwd(), 'resources/images/tstrel1.png'),
+    'tstrel2': os.path.join(os.getcwd(), 'resources/images/tstrel2.png'),
+    'tstrel3': os.path.join(os.getcwd(), 'resources/images/tstrel3.png'),
+    'tstrel4': os.path.join(os.getcwd(), 'resources/images/tstrel4.png')
 }
 
 LANDSCAPE_PATHS = {

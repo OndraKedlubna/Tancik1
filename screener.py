@@ -32,14 +32,34 @@ class ScreenerClass:
             screen.fill((255, 255, 255), (0, 0, screen.get_width(), cfg.TILE_SIZE))
             self.__show_score(screen, info)
             screen.fill((255, 255, 255), (0, cfg.TILE_SIZE * 3, screen.get_width(), screen.get_height()))
+            cheat = 1
             cur_speed = tancik.upgrades.speed
-            cur_speed_cost = cfg.UPGRADES.get('speed').get(cur_speed).get('cost')
+            cur_speed_cost = cfg.UPGRADES.get('speed').get(cur_speed).get('cost') // cheat
+            cur_reload = tancik.upgrades.reload
+            cur_reload_cost = cfg.UPGRADES.get('reload').get(cur_reload).get('cost') // cheat
+            cur_power = tancik.upgrades.power
+            cur_power_cost = cfg.UPGRADES.get('power').get(cur_power).get('cost') // cheat
+
             multiplier_text = mfont.render(
                 "[A]Motor: %s z %d, cena %d" % (cur_speed, cfg.UPGRADES.get('speed').get('cap'),
                                                 cur_speed_cost), True, (153, 102, 0))
             crect = multiplier_text.get_rect()
             crect.midtop = (cfg.SCREENSIZE[0] / 2, cfg.TILE_SIZE * 3)
             screen.blit(multiplier_text, crect)
+
+            reload_text = mfont.render(
+                "[S]Nabijeni: %s z %d, cena %d" % (cur_reload, cfg.UPGRADES.get('reload').get('cap'),
+                                                cur_reload_cost), True, (153, 102, 0))
+            crect = reload_text.get_rect()
+            crect.midtop = (cfg.SCREENSIZE[0] / 2, cfg.TILE_SIZE * 4)
+            screen.blit(reload_text, crect)
+
+            power_text = mfont.render(
+                "[D]Kanon: %s z %d, cena %d" % (cur_power, cfg.UPGRADES.get('power').get('cap'),
+                                                   cur_power_cost), True, (153, 102, 0))
+            crect = power_text.get_rect()
+            crect.midtop = (cfg.SCREENSIZE[0] / 2, cfg.TILE_SIZE * 5)
+            screen.blit(power_text, crect)
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_w:
@@ -48,6 +68,16 @@ class ScreenerClass:
                     if info.money >= cur_speed_cost:
                         if tancik.upgrades.upgrade_speed():
                             info.decrease_money(cur_speed_cost)
+                            tancik.set_upgrades_images()
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_s:
+                    if info.money >= cur_reload_cost:
+                        if tancik.upgrades.upgrade_reload():
+                            info.decrease_money(cur_reload_cost)
+                            tancik.set_upgrades_images()
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_d:
+                    if info.money >= cur_power_cost:
+                        if tancik.upgrades.upgrade_power():
+                            info.decrease_money(cur_power_cost)
                             tancik.set_upgrades_images()
                 pygame.display.update()
 
@@ -129,12 +159,11 @@ class ScreenerClass:
                     waiting = False
                 pygame.display.update()
 
-    def showPlaygroundScreen(self, screen, tancik, tancik_shoots, info, enemy_shoots):
+    def showPlaygroundScreen(self, screen, tancik, info, enemy_shoots):
         screen.fill(cfg.COLOR_SKY)
         self.__paintGrass(screen)
         self.__paintTurbo(screen, tancik)
         self.__paintShoot(screen, tancik)
-        tancik_shoots.draw(screen)
         enemy_shoots.draw(screen)
         info.enemies.draw(screen)
         self.__show_score(screen, info)
