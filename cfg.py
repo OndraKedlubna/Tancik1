@@ -12,20 +12,20 @@ COLOR_SKY = (133, 193, 233)
 PARAM_TURBO_CHARGE = 200
 PARAM_TURBO_FUEL = 60
 
-MAX_LEVEL = 3
+MAX_LEVEL = 4
 
 ENEMIES = {
     'eminion': {
         'speedx': 2,
         'speedy': 4,
-        'reload': 20,
+        'reload': 30,
         'score': 25,
         'shootspeed': 3
     },
     'eminion2': {
         'speedx': 4,
         'speedy': 4,
-        'reload': 20,
+        'reload': 30,
         'score': 50,
         'shootspeed': 6
     },
@@ -40,19 +40,25 @@ ENEMIES = {
 
 LEVELS = {
     1: {
-        'eminion': 10,
+        'eminion': 15,
         'eminion2': 1,
+        'eminion3': 1,
 
     },
     2: {
-        'eminion': 10,
-        'eminion2': 5,
-        'eminion3': 5,
+        'eminion': 15,
+        'eminion2': 8,
+        'eminion3': 7,
     },
     3: {
+        'eminion': 8,
+        'eminion2': 15,
+        'eminion3': 7,
+    },
+    4: {
         'eminion': 5,
-        'eminion2': 10,
-        'eminion3': 5,
+        'eminion2': 15,
+        'eminion3': 15,
     }
 
 }
@@ -60,7 +66,8 @@ LEVELS = {
 ENEMIES_LIMIT = {
     1: 1,
     2: 2,
-    3: 3
+    3: 2,
+    4: 3
 }
 
 UPGRADES = {

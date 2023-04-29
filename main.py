@@ -2,7 +2,6 @@ import pygame
 import cfg
 import sys
 from tancik import TancikClass
-from shoot import ShootClass
 from info import InfoClass
 from screener import ScreenerClass
 
@@ -75,6 +74,7 @@ def main():
     screener = ScreenerClass()
     screen, tancik, info, game_time, enemy_shoots = init_game(screener)
     clock = pygame.time.Clock()
+    multConstant = cfg.FPS * 3
     while True:
         screener.showPlaygroundScreen(screen, tancik, info, enemy_shoots)
         for event in pygame.event.get():
@@ -117,10 +117,10 @@ def main():
 
         game_time += 1
         info.multiplier_time = info.multiplier_time + 1
-        if info.multiplier_time % 200 == 0:
+        if info.multiplier_time % multConstant == 0:
             info.decrease_multiplier(1)
 
-        if game_time % 100 == 0:
+        if game_time % multConstant == 0:
             info.decrease_score(2)
             print(str(info.enemies))
             print(str(info.enemies_names))
