@@ -2,6 +2,7 @@ import pygame
 import cfg
 import random
 from eship import EShipClass
+from eplane import EPlaneClass
 
 
 class InfoClass():
@@ -45,6 +46,8 @@ class InfoClass():
                 self.enemies.add(EShipClass('eminion2', (random.randint(0, 850), 300)))
             if enemy_name == 'eminion3':
                 self.enemies.add(EShipClass('eminion3', (random.randint(0, 850), 300)))
+            if enemy_name == 'eplane':
+                self.enemies.add(EPlaneClass('eplane', (- cfg.TILE_SIZE, random.randint(cfg.TILE_SIZE, cfg.TILE_SIZE * 8))))
 
     def clean_enemies(self):
         for enemy in self.enemies:

@@ -35,11 +35,19 @@ ENEMIES = {
         'reload': 0,
         'score': 50,
         'shootspeed': 5
+    },
+    'eplane': {
+        'speedx': 2,
+        'speedy': 4,
+        'reload': 30,
+        'score': 25,
+        'shootspeed': 3
     }
 }
 
 LEVELS = {
     1: {
+        'eplane': 5,
         'eminion': 15,
         'eminion2': 1,
         'eminion3': 1,
@@ -182,7 +190,13 @@ ENEMIES_PATHS = {
     'eminion3': os.path.join(os.getcwd(), 'resources/images/eminion3.png'),
     'eminionD': os.path.join(os.getcwd(), 'resources/images/eminionD.png'),
     'eminion2D': os.path.join(os.getcwd(), 'resources/images/eminionD.png'),
-    'eminion3D': os.path.join(os.getcwd(), 'resources/images/eminionD.png')
+    'eminion3D': os.path.join(os.getcwd(), 'resources/images/eminionD.png'),
+    'eplane': os.path.join(os.getcwd(), 'resources/images/eplane.png'),
+    'eplane2': os.path.join(os.getcwd(), 'resources/images/eplane2.png'),
+    'eplane3': os.path.join(os.getcwd(), 'resources/images/eplane3.png'),
+    'eplaneD': os.path.join(os.getcwd(), 'resources/images/eminionD.png'),
+    'eplane2D': os.path.join(os.getcwd(), 'resources/images/eminionD.png'),
+    'eplane3D': os.path.join(os.getcwd(), 'resources/images/eminionD.png')
 }
 
 FONTPATH = os.path.join(os.getcwd(), 'resources/font/FZSTK.TTF')
