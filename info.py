@@ -48,6 +48,10 @@ class InfoClass():
                 self.enemies.add(EShipClass('eminion3', (random.randint(0, 850), 300)))
             if enemy_name == 'eplane':
                 self.enemies.add(EPlaneClass('eplane', (- cfg.TILE_SIZE, random.randint(cfg.TILE_SIZE, cfg.TILE_SIZE * 8))))
+            if enemy_name == 'eplane2':
+                self.enemies.add(EPlaneClass('eplane2', (- cfg.TILE_SIZE, random.randint(cfg.TILE_SIZE, cfg.TILE_SIZE * 8))))
+            if enemy_name == 'eplane3':
+                self.enemies.add(EPlaneClass('eplane3', (- cfg.TILE_SIZE, random.randint(cfg.TILE_SIZE, cfg.TILE_SIZE * 8))))
 
     def clean_enemies(self):
         for enemy in self.enemies:

@@ -37,33 +37,56 @@ ENEMIES = {
         'shootspeed': 5
     },
     'eplane': {
-        'speedx': 2,
+        'speedx': 3,
         'speedy': 4,
         'reload': 30,
         'score': 25,
         'shootspeed': 3
+    },
+    'eplane2': {
+        'speedx': 5,
+        'speedy': 4,
+        'reload': 30,
+        'score': 50,
+        'shootspeed': 6
+    },
+    'eplane3': {
+        'speedx': 4,
+        'speedy': 4,
+        'reload': 0,
+        'score': 50,
+        'shootspeed': 4
     }
 }
 
 LEVELS = {
     1: {
-        'eplane': 5,
-        'eminion': 15,
+        'eplane': 10,
+        'eminion': 10,
         'eminion2': 1,
         'eminion3': 1,
 
     },
     2: {
+        'eplane': 10,
+        'eplane2': 5,
+        'eplane3': 5,
         'eminion': 15,
         'eminion2': 8,
         'eminion3': 7,
     },
     3: {
+        'eplane': 5,
+        'eplane2': 10,
+        'eplane3': 5,
         'eminion': 8,
         'eminion2': 15,
         'eminion3': 7,
     },
     4: {
+        'eplane': 5,
+        'eplane2': 10,
+        'eplane3': 10,
         'eminion': 5,
         'eminion2': 15,
         'eminion3': 15,
